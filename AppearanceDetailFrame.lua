@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- appearance details
 
 local AppearanceDetailFrame;
@@ -19,13 +20,13 @@ function AppearanceDetailFrame_Load(appearanceId)
 	AppearanceDetailFrame.text:SetText(appearanceId);
 	AppearanceDetailItem_Reset();
 	
-	local listItems = ItemsByAppearances[appearanceId].i;
+	local listItems = app.ItemsByAppearances[appearanceId].i;
 
 	local count = 1;
 	for i=1, #listItems do
 		local itemId = listItems[i];
-		local name = Items[itemId].n;
-		local quality = Items[itemId].q;
+		local name = app.Items[itemId].n;
+		local quality = app.Items[itemId].q;
 		if filterGrey and quality <= 1 then
 			-- grey filter
 		else

@@ -1,3 +1,5 @@
+local appName, app = ...;
+
 -- minimap button
 local button = CreateFrame("BUTTON", "AllTheMogsMinimap", Minimap);
 button:SetPoint("CENTER", 0, 0);

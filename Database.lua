@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- database
 
 databaseLoaded = false;
@@ -9,7 +10,7 @@ function InitDatabase()
 	end
 
 	-- improve items database from ATT
-	for itemId, item in pairs(Items) do
+	for itemId, item in pairs(app.Items) do
 		local attItem = ATTC.SearchForField("itemID", itemId);
 
 		local sourceQuest;
@@ -19,27 +20,27 @@ function InitDatabase()
 		for k,v in pairs(attItem) do
 			-- boe
 			if v.b and v.b ~= 1 then
-				Items[itemId].boe = 1;
+				app.Items[itemId].boe = 1;
 			end
 
 			-- rwp
 			if v.rwp and isRWP(v.rwp) then
-				Items[itemId].rwp = 1;
+				app.Items[itemId].rwp = 1;
 			end
 
 			-- pvp
 			if v.pvp then
-				Items[itemId].pvp = 1;
+				app.Items[itemId].pvp = 1;
 			end
 
 			-- item is directly collectible/collected
 			if v.collectible and v.collected then
-				Items[itemId].collected = 1;
+				app.Items[itemId].collected = 1;
 			end
 
 			-- quest
 			if v.parent and v.parent.questID then
-				Items[itemId].sourceQuest = 1;
+				app.Items[itemId].sourceQuest = 1;
 				--local quest = v.parent;
 				--if quest.collected then
 				--	Items[itemId].collected = 1;
@@ -52,13 +53,13 @@ function InitDatabase()
 			-- craft
 			elseif v.parent and v.parent.parent and (v.parent.parent.professionID
 											or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then
-				Items[itemId].sourceCraft = 1;
+				app.Items[itemId].sourceCraft = 1;
 			-- loot from npc
 			elseif v.parent and (v.parent.npcID
 							or (v.parent.parent and (v.parent.parent.npcID
 											-- loot from instance zone
 											or (v.parent.parent.parent and v.parent.parent.parent.instanceID)))) then
-				Items[itemId].sourceDrop = 1;
+				app.Items[itemId].sourceDrop = 1;
 			end
 		end
 	end
@@ -81,7 +82,7 @@ end
 
 -- build item text : name(hyperlink with color) + bonus from ATT
 function GetItemText(itemId, parentSlot, parentSubclass)
-	local item = Items[itemId];
+	local item = app.Items[itemId];
 	local color = COLOR_STRINGS[item.q];
 	local slot = typesToSlots[item.t];
 	local subclass;

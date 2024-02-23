@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- Appearance models
 
 local ModelFrames = {};
@@ -134,18 +135,18 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	ModelFrame.modelFrame:Undress();
 
 	-- get first item of an appearance
-	local itemId = ItemsByAppearances[appearanceId].i[1];
+	local itemId = app.ItemsByAppearances[appearanceId].i[1];
 	ModelFrame.modelFrame:TryOn("item:"..itemId);
 
 	-- collected
 	ModelFrame.background:SetAtlas("transmog-wardrobe-border-uncollected");
-	if ItemsByAppearances[appearanceId].collected then
+	if app.ItemsByAppearances[appearanceId].collected then
 		ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 	else
-		for k, v in pairs(ItemsByAppearances[appearanceId].i) do
-			if filterGrey and Items[v].q <= 1 then
+		for k, v in pairs(app.ItemsByAppearances[appearanceId].i) do
+			if filterGrey and app.Items[v].q <= 1 then
 				-- filter grey
-			elseif Items[v].c or (ItemCache[v] and ItemCache[v].c) then
+			elseif app.Items[v].c or (ItemCache[v] and ItemCache[v].c) then
 				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 				break;
 			end
@@ -157,35 +158,35 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	ModelFrame.modelFrame.craft:Hide();
 	ModelFrame.modelFrame.drop:Hide();
 
-	for k, v in pairs(ItemsByAppearances[appearanceId].i) do
-		local subclass = Items[v].s;
-		if filterGrey and Items[v].q <= 1 then
+	for k, v in pairs(app.ItemsByAppearances[appearanceId].i) do
+		local subclass = app.Items[v].s;
+		if filterGrey and app.Items[v].q <= 1 then
 			-- filter grey
 		elseif filterSlot >= 1 and filterSlot <= 12 and subclass ~= filterArmorType and subclass ~= 0 then
 			-- filter armor of different type
 		else
 			-- collected
-			if Items[v].c or (ItemCache[v] and ItemCache[v].c) then
+			if app.Items[v].c or (ItemCache[v] and ItemCache[v].c) then
 				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 			end
 			-- rwp
-			if Items[v].rwp then
+			if app.Items[v].rwp then
 				ModelFrame.modelFrame.rwp:Show();
 			end
 			-- boe
-			if Items[v].boe then
+			if app.Items[v].boe then
 				ModelFrame.modelFrame.boe:Show();
 			end
 			-- pvp
-			if Items[v].pvp then
+			if app.Items[v].pvp then
 				ModelFrame.modelFrame.pvp:Show();
 			end
 			-- craft
-			if Items[v].sourceCraft then
+			if app.Items[v].sourceCraft then
 				ModelFrame.modelFrame.craft:Show();
 			end
 			-- drop
-			if Items[v].sourceDrop then
+			if app.Items[v].sourceDrop then
 				ModelFrame.modelFrame.drop:Show();
 			end
 		end
@@ -253,16 +254,16 @@ function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 	local list = {};
 	local count = 1;
 	
-	local listAppearances = AppearancesByTypes[type][subclass];
+	local listAppearances = app.AppearancesByTypes[type][subclass];
 	for i=1, #listAppearances do
 		local found = false;
 		local appearanceId = listAppearances[i];
 
-		if ItemsByAppearances[appearanceId] then
-			local listItems = ItemsByAppearances[appearanceId].i;
+		if app.ItemsByAppearances[appearanceId] then
+			local listItems = app.ItemsByAppearances[appearanceId].i;
 
 			for j=1, #listItems do
-				local item = Items[listItems[j]];
+				local item = app.Items[listItems[j]];
 				if filterGrey and (item.q == 0 or item.q == 1) then
 					-- filter grey
 				else

@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- globals
 
 -- texts

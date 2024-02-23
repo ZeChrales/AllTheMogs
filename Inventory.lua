@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- item cache : bags, equipment, mail, bank, guildbank
 ItemCacheMixin = {}
 
@@ -123,11 +124,11 @@ end
 -- container : bag id or equipement id
 -- slot : bag slot id or 1 for equipment
 function ItemCacheMixin:UpdateItem(itemId, table, name, container, slot)
-    print("updateitem "..itemId.." "..name.." "..container.." "..slot);
     -- only if item is in database
     if not self:IsItemInDatabase(itemId) then
 	    return;
 	end
+    --print("updateitem "..itemId.." "..name.." "..container.." "..slot);
 
     local key = playerGuid.."-"..name..container;
 
@@ -157,7 +158,7 @@ end
 -- update cache
 function ItemCacheMixin:UpdateItemCache(itemId)
     -- check if item is in database
-    if itemId and Items[itemId] and ItemsByAppearances[Items[itemId].a] then
+    if itemId and app.Items[itemId] and app.ItemsByAppearances[app.Items[itemId].a] then
         if ItemCache[itemId] == nil then
             ItemCache[itemId] = {};
         end
@@ -185,5 +186,5 @@ end
 
 -- check if an item is in database (with an appearance)
 function ItemCacheMixin:IsItemInDatabase(itemId)
-    return itemId and Items[itemId] and ItemsByAppearances[Items[itemId].a];
+    return itemId and app.Items[itemId] and app.ItemsByAppearances[app.Items[itemId].a];
 end

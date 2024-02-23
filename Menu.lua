@@ -1,3 +1,4 @@
+local appName, app = ...;
 -- adapted from WardrobeItemsCollectionMixin:CreateSlotButtons in Blizzard_Wardrobe.lua
 local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0");
 local spacingNoSmallButton = 2;
