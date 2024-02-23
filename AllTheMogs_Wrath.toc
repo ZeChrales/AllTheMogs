@@ -1,0 +1,23 @@
+## Interface: 30403
+## Title: AllTheMogs
+## Version: 1.0
+## Author: Chrales
+## OptionalDeps: AllTheThings, LibStub, LibUIDropDownMenu
+## SavedVariables: ItemCache, CharacterInventory
+
+embeds.xml
+
+AppearancesData\WotlkAppearances.lua
+Database.lua
+Inventory.lua
+
+Localization.lua
+
+Tooltip.lua
+
+MinimapButton.lua
+Menu.lua
+AppearanceModelFrame.lua
+AppearanceDetailFrame.lua
+
+AllTheMogs.lua

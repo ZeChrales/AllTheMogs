@@ -1,0 +1,149 @@
+-- database
+
+databaseLoaded = false;
+
+function InitDatabase()
+	-- AllTheThings is optional
+	if databaseLoaded or ATTC == nil then
+		return;
+	end
+
+	-- improve items database from ATT
+	for itemId, item in pairs(Items) do
+		local attItem = ATTC.SearchForField("itemID", itemId);
+
+		local sourceQuest;
+		local sourceCraft;
+		local sourceDrop;
+
+		for k,v in pairs(attItem) do
+			-- boe
+			if v.b and v.b ~= 1 then
+				Items[itemId].boe = 1;
+			end
+
+			-- rwp
+			if v.rwp and isRWP(v.rwp) then
+				Items[itemId].rwp = 1;
+			end
+
+			-- pvp
+			if v.pvp then
+				Items[itemId].pvp = 1;
+			end
+
+			-- item is directly collectible/collected
+			if v.collectible and v.collected then
+				Items[itemId].collected = 1;
+			end
+
+			-- quest
+			if v.parent and v.parent.questID then
+				Items[itemId].sourceQuest = 1;
+				--local quest = v.parent;
+				--if quest.collected then
+				--	Items[itemId].collected = 1;
+				--	collected = true;
+				--end
+				--if quest.total and quest.progress == quest.total then
+					--Items[itemId].collected = 1;
+					--break;
+				--end
+			-- craft
+			elseif v.parent and v.parent.parent and (v.parent.parent.professionID
+											or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then
+				Items[itemId].sourceCraft = 1;
+			-- loot from npc
+			elseif v.parent and (v.parent.npcID
+							or (v.parent.parent and (v.parent.parent.npcID
+											-- loot from instance zone
+											or (v.parent.parent.parent and v.parent.parent.parent.instanceID)))) then
+				Items[itemId].sourceDrop = 1;
+			end
+		end
+	end
+
+	-- database loaded
+	databaseLoaded = true;
+end
+
+-- check version RWP
+function isRWP(version)
+	local isRWP = false;
+
+	local major = string.sub(version, 1, 1);
+	if major == "4" then
+		isRWP = true;
+	end
+
+	return isRWP;
+end
+
+-- build item text : name(hyperlink with color) + bonus from ATT
+function GetItemText(itemId, parentSlot, parentSubclass)
+	local item = Items[itemId];
+	local color = COLOR_STRINGS[item.q];
+	local slot = typesToSlots[item.t];
+	local subclass;
+	-- armor
+	if slot >= 1 and slot <= 12 then
+		subclass = item.s;
+	-- weapon
+	elseif slot == 14 then
+		subclass = typesToWeaponSubclasses[item.s];
+	-- offhand
+	elseif slot == 16 then
+		subclass = typesToOffhandSubclasses[item.s];
+	end
+
+	-- itemlink
+	local text = color.."\124Hitem:"..itemId.."::::::::80:::::\124h["..item.n.."]\124h\124r";
+
+	-- different type/subclass
+	if slot ~= parentSlot or subclass ~= parentSubclass then
+		-- armor
+		if slot >= 1 and slot <= 12 then
+			local type = "Cosmetic";
+			if subclass >= 1 and subclass <= 4 then
+				type = armorType[subclass];
+			end
+			text = text.." \124cffFF0000("..type..")\124r";
+		-- weapon
+		elseif slot == 14 then
+			text = text.." \124cffFF0000("..weaponType[subclass].name..")\124r";
+		-- offhand
+		elseif slot == 16 then
+			text = text.." \124cffFF0000("..offhandType[subclass].name..")\124r";
+		end
+	end
+
+	-- special ATT infos parsed from its internal database
+	local bonus = "";
+	-- rwp
+	if item.rwp then
+		bonus = bonus.."\124cFFFFAAAA RWP\124r";
+	end
+	-- pvp
+	if item.pvp then
+		bonus = bonus.."\124cFF00FEDD PVP\124r";
+	end
+	-- boe
+	if item.boe then
+		bonus = bonus.."\124r B";
+	end
+
+	-- quest
+	if item.sourceQuest then
+		bonus = bonus.."\124cFFFFD700 Q\124r";
+	-- craft
+	elseif item.sourceCraft then
+		bonus = bonus.."\124cFFC45F06 C\124r";
+	-- drop
+	elseif item.sourceDrop then
+		bonus = bonus.."\124cFF3D85C6 D\124r";
+	end
+
+	text = text..bonus;
+
+	return text;
+end
