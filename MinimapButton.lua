@@ -1,6 +1,5 @@
 -- minimap button
-
-local button = CreateFrame("BUTTON", "Test-Minimap", Minimap);
+local button = CreateFrame("BUTTON", "AllTheMogsMinimap", Minimap);
 button:SetPoint("CENTER", 0, 0);
 button:SetFrameStrata("HIGH");
 button:SetMovable(true);
@@ -15,20 +14,19 @@ texture:SetPoint("CENTER", 1, 0);
 texture:SetTexture("Interface\\Minimap\\objecticonsatlas");
 texture:SetAtlas("poi-transmogrifier");
 texture:SetSize(21, 21);
-button.texture = texture;
 
 -- Create the Button Tracking Border
 local border = button:CreateTexture(nil, "BORDER");
 border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder");
 border:SetPoint("CENTER", 12, -12);
 border:SetSize(56, 56);
-button.border = border;
 
+-- Hightlight texture on mouseOver
 button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight", "ADD");
 
 -- Button Configuration
-local radius = 100;
 local rounding = 10;
+local position = 193.47782;
 local MinimapShapes = {
 	-- quadrant booleans (same order as SetTexCoord)
 	-- {bottom-right, bottom-left, top-right, top-left}
@@ -49,27 +47,26 @@ local MinimapShapes = {
 	["TRICORNER-BOTTOMRIGHT"]	= {true,  true,  true,  false},
 };
 button.update = function(self)
-	local position = -10.31;
-	local angle = math.rad(position) -- determine position on your own
-	local x, y
-	local cos = math.cos(angle)
-	local sin = math.sin(angle)
-	local q = 1;
-	if cos < 0 then
-		q = q + 1;	-- lower
+	local angle = math.rad(position);
+	local x, y, q = math.cos(angle), math.sin(angle), 1;
+	if x < 0 then q = q + 1; end
+	if y > 0 then q = q + 2; end
+	local radius = 0;
+	local width = (Minimap:GetWidth() * 0.5) + radius;
+	local height = (Minimap:GetHeight() * 0.5) + radius;
+	if MinimapShapes[GetMinimapShape and GetMinimapShape() or "ROUND"][q] then
+		x, y = x * width, y * height;
+	else
+		x = math.max(-width, math.min(x*(math.sqrt(2*(width)^2)-rounding), width));
+		y = math.max(-height, math.min(y*(math.sqrt(2*(height)^2)-rounding), height));
 	end
-	if sin > 0 then
-		q = q + 2;	-- right
-	end
-	x = cos*radius;
-	y = sin*radius;
-	self:SetPoint("CENTER", "Minimap", "CENTER", -math.floor(x), math.floor(y));
+	self:SetPoint("CENTER", "Minimap", "CENTER", math.floor(x), math.floor(y));
 end
 local update = function(self)
-	local w, x = GetCursorPosition();
-	local y, z = Minimap:GetLeft(), Minimap:GetBottom();
-	local s = UIParent:GetScale();
-	w = y - w / s + 70; x = x / s - z - 70;
+	local mx, my = Minimap:GetCenter();
+	local px, py = GetCursorPosition();
+	local scale = Minimap:GetEffectiveScale();
+	position = math.deg(math.atan2((py / scale) - my, (px / scale) - mx)) % 360;
 	self:Raise();
 	self:update();
 end
@@ -86,5 +83,6 @@ button:SetScript("OnClick", function()
 	ClassicTransmogFrame:Show();
 	AppearanceModelFrame_LoadWithFilter();
 end);
+button:SetScript("OnEvent", button.update);
 button:update();
 button:Show();
