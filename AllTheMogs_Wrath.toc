@@ -1,7 +1,10 @@
 ## Interface: 30403
 ## Title: AllTheMogs
-## Version: 1.0
+## Name: AllTheMogs
+## Notes: Addon to check all the Transmogrifications available in game
+## Version: @project-version@
 ## Author: Chrales
+## X-Curse-Project-ID: 978634
 ## OptionalDeps: AllTheThings, LibStub, LibUIDropDownMenu
 ## SavedVariables: ItemCache, CharacterInventory
 
