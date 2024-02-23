@@ -1,4 +1,4 @@
-## Interface: 11404
+## Interface: 11501
 ## Title: AllTheMogs
 ## Version: 1.0
 ## Author: Chrales
