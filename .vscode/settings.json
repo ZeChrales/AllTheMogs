@@ -1,0 +1,25 @@
+{
+    "Lua.diagnostics.globals": [
+        "UISpecialFrames",
+        "ChatFrame_OnHyperlinkShow",
+        "ATTACHMENTS_MAX",
+        "UIDROPDOWNMENU_MAXLEVELS",
+        "ColorPickerFrame",
+        "ExecuteFrameScript",
+        "GameFontDisableSmallLeft",
+        "GameFontHighlightSmallLeft",
+        "DropDownMenuButtonMixin",
+        "TOOLTIP_DEFAULT_COLOR",
+        "TOOLTIP_DEFAULT_BACKGROUND_COLOR",
+        "GameFontNormalSmallLeft",
+        "VIDEO_QUALITY_LABEL6",
+        "NORMAL_FONT_COLOR",
+        "HIGHLIGHT_FONT_COLOR",
+        "TooltipBackdropTemplateMixin",
+        "SharedTooltip_SetBackdropStyle",
+        "GRAY_FONT_COLOR",
+        "GameTooltip_Hide",
+        "RED_FONT_COLOR",
+        "GameTooltip_AddErrorLine"
+    ]
+}
