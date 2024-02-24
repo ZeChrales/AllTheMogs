@@ -41,15 +41,13 @@ function InitDatabase()
 			-- quest
 			if v.parent and v.parent.questID then
 				app.Items[itemId].sourceQuest = 1;
-				--local quest = v.parent;
-				--if quest.collected then
-				--	Items[itemId].collected = 1;
-				--	collected = true;
-				--end
-				--if quest.total and quest.progress == quest.total then
-					--Items[itemId].collected = 1;
-					--break;
-				--end
+				local quest = v.parent;
+				if quest.collected then
+					app.Items[itemId].collected = 1;
+				end
+				if quest.total and quest.progress == quest.total then
+					app.Items[itemId].collected = 1;
+				end
 			-- craft
 			elseif v.parent and v.parent.parent and (v.parent.parent.professionID
 											or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then

@@ -167,7 +167,7 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 			-- filter armor of different type
 		else
 			-- collected
-			if app.Items[v].c or (ItemCache[v] and ItemCache[v].c) then
+			if app.Items[v].collected or (ItemCache[v] and ItemCache[v].c) then
 				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 			end
 			-- rwp
