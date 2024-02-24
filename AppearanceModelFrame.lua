@@ -155,6 +155,7 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	ModelFrame.modelFrame.rwp:Hide();
 	ModelFrame.modelFrame.boe:Hide();
 	ModelFrame.modelFrame.pvp:Hide();
+	ModelFrame.modelFrame.quest:Hide();
 	ModelFrame.modelFrame.craft:Hide();
 	ModelFrame.modelFrame.drop:Hide();
 
@@ -180,6 +181,10 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 			-- pvp
 			if app.Items[v].pvp then
 				ModelFrame.modelFrame.pvp:Show();
+			end
+			-- quest
+			if app.Items[v].sourceQuest then
+				ModelFrame.modelFrame.quest:Show();
 			end
 			-- craft
 			if app.Items[v].sourceCraft then
