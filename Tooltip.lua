@@ -12,7 +12,8 @@ local function ShowAppearances(tooltip)
 		return;
 	end
 	local itemId = GetItemInfoFromHyperlink(itemLink);
-	if app.Items[itemId] then
+	-- ignore munitions
+	if app.Items[itemId] and app.Items[itemId].t ~= 14 then
 		local appearanceId = app.Items[itemId].a;
 		local parentSlot = typesToSlots[app.Items[itemId].t];
 		local parentSubclass;
