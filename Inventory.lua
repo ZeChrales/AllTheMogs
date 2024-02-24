@@ -65,7 +65,7 @@ function ItemCacheMixin:OnEvent(eventName, ...)
     elseif eventName == "BANKFRAME_OPENED" then
         self:ParseBankBags();
     elseif eventName == "MAIL_INBOX_UPDATE" then
-        self:UpdateMails();
+        self:ParseMails();
 	end
 end
 
@@ -89,7 +89,7 @@ function ItemCacheMixin:ParseMails()
             elseif CharacterInventory[playerGuid]["m"][mail] and CharacterInventory[playerGuid]["m"][mail][attachment] then
                 local previous = CharacterInventory[playerGuid]["m"][mail][attachment];
                 local key = playerGuid.."-m"..mail;
-                RemoveItemFromCache(previous, mail);
+                self:RemoveItemFromCache(previous, mail);
             end
         end
     end
