@@ -1,5 +1,6 @@
 # AllTheMogs
 World of Warcraft Addon to check all the Transmogrifications available in game
+Works on Classic (Era, Hardcore and SoD), Wrath of the Lich King Classic, and Retail
 
 ## Main UI Features
 
@@ -7,7 +8,7 @@ Minimap button to open the Mogs UI, with the list of all different appearances a
 - List of appearances for each type of armor or weapon
 
 With AllTheThings (ATT) addon installed, you can also see :
-- Visual indicators of appearance source (Quest, Loot, Merchant, Craft ...)
+- Visual indicators of appearance source (Quest, Loot, Craft, PvP ...)
 - Visual indicators of appearance info (Removed with Patch, Bind on Equip ...)
 - Hyperlinks of Items sharing the same appearance
 - Completion status
