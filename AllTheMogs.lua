@@ -172,4 +172,4 @@ end)
 --x = x + 200
 --atlasButton:SetContentTable({ 1, itemId })
 
-print("FIN")
+print("AllTheMogs loaded !")

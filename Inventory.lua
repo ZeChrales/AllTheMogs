@@ -51,7 +51,7 @@ end
 
 -- event trigger
 function ItemCacheMixin:OnEvent(eventName, ...)
-    print("debug event "..eventName);
+    --print("debug event "..eventName);
     if eventName == "PLAYER_EQUIPMENT_CHANGED" then
         local slot = ...;
         if slot >= C_Container.ContainerIDToInventoryID(1) then
@@ -176,7 +176,7 @@ function ItemCacheMixin:RemoveItemFromCache(itemId, key)
         local newCount = previousCount - 1;
         if newCount <= 0 then
             --table.removekey(ItemCache[itemId], key);
-            print("removing "..key);
+            --print("removing "..key);
             ItemCache[itemId][key] = nil;
         else
             ItemCache[itemId][key] = newCount;
