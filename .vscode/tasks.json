@@ -4,9 +4,32 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "build era",
+            "type": "shell",
+            "command": "cp -r -Force . 'C:\\World of Warcraft\\_classic_era_\\Interface\\AddOns'"
+        },
+        {
+            "label": "build wotlk",
             "type": "shell",
             "command": "cp -r -Force . 'C:\\World of Warcraft\\_classic_\\Interface\\AddOns'"
+        },
+        {
+            "label": "build retail",
+            "type": "shell",
+            "command": "cp -r -Force . 'C:\\World of Warcraft\\_retail_\\Interface\\AddOns'"
+        },
+        {
+            "label": "build",
+            "dependsOn": [
+                "build era",
+                "build wotlk",
+                "build retail"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
