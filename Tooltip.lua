@@ -20,10 +20,10 @@ local function ShowAppearances(tooltip)
 		-- armor
 		if parentSlot >= 1 and parentSlot <= 12 then
 			parentSubclass = app.Items[itemId].s;
-		-- weapon
+			-- weapon
 		elseif parentSlot == 14 then
 			parentSubclass = typesToWeaponSubclasses[app.Items[itemId].s];
-		-- offhand
+			-- offhand
 		elseif parentSlot == 16 then
 			parentSubclass = typesToOffhandSubclasses[app.Items[itemId].s];
 		end
@@ -38,7 +38,7 @@ local function ShowAppearances(tooltip)
 			tooltip:AddLine("Shared Appearances : ");
 		end
 
-		for i=1, #listItems do
+		for i = 1, #listItems do
 			local sharedItemId = listItems[i];
 			local quality = app.Items[sharedItemId].q;
 			if filterGrey and quality <= 1 then
@@ -47,13 +47,13 @@ local function ShowAppearances(tooltip)
 				local text = GetItemText(sharedItemId, parentSlot, parentSubclass);
 
 				-- completed state
-				local check = "\124T".."Interface\\AddOns\\AllTheThings\\assets\\unknown"..":0\124t";
-				if app.Items[sharedItemId].collected or (ItemCache[sharedItemId] and ItemCache[sharedItemId].c) then
-					check = "\124T".."Interface\\AddOns\\AllTheThings\\assets\\known_circle"..":0\124t";
+				local check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\unknown" .. ":0\124t";
+				if app.Items[sharedItemId].collected or ItemCache[sharedItemId] then
+					check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\known_circle" .. ":0\124t";
 				end
 
 				-- display item name + att infos
-				tooltip:AddDoubleLine("  "..text, check);
+				tooltip:AddDoubleLine("  " .. text, check);
 			end
 		end
 
