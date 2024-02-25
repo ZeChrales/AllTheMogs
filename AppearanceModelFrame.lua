@@ -10,11 +10,11 @@ function AppearanceModelFrame_Init(parentFrame)
 	for i = 0, 19 do
 		local line = math.floor(i / 5) + 1;
 		local column = i % 5 + 1;
-		local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL"..line.."C"..column, parentFrame);
+		local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame);
 		if lastFrame == nil then
 			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 5, -5);
 		elseif column == 1 then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 5, -(line-1)*100-5);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 5, -(line - 1) * 100 - 5);
 		else
 			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 0, 0);
 		end
@@ -127,31 +127,21 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	ModelFrame.appearanceId = appearanceId;
 
 	-- change zoom/position depending on slot
-	ModelFrame.modelFrame:SetPortraitZoom(CAM_POS[filterSlot].Zoom);
+	ModelFrame.modelFrame:SetPortraitZoom(0.8);
 	ModelFrame.modelFrame:SetRotation(CAM_POS[filterSlot].Rotation);
-	ModelFrame.modelFrame:SetPosition(CAM_POS[filterSlot].Position[1], CAM_POS[filterSlot].Position[2], CAM_POS[filterSlot].Position[3]);
+	ModelFrame.modelFrame:SetPosition(CAM_POS[filterSlot].Position[1], CAM_POS[filterSlot].Position[2],
+		CAM_POS[filterSlot].Position[3]);
+		ModelFrame.modelFrame:SetPortraitZoom(CAM_POS[filterSlot].Zoom);
 
 	ModelFrame:Show();
 	ModelFrame.modelFrame:Undress();
 
 	-- get first item of an appearance
 	local itemId = app.ItemsByAppearances[appearanceId].i[1];
-	ModelFrame.modelFrame:TryOn("item:"..itemId);
+	ModelFrame.modelFrame:TryOn("item:" .. itemId);
 
 	-- collected
 	ModelFrame.background:SetAtlas("transmog-wardrobe-border-uncollected");
-	if app.ItemsByAppearances[appearanceId].collected then
-		ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
-	else
-		for k, v in pairs(app.ItemsByAppearances[appearanceId].i) do
-			if filterGrey and app.Items[v].q <= 1 then
-				-- filter grey
-			elseif app.Items[v].c or (ItemCache[v] and ItemCache[v].c) then
-				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
-				break;
-			end
-		end
-	end
 	ModelFrame.modelFrame.rwp:Hide();
 	ModelFrame.modelFrame.boe:Hide();
 	ModelFrame.modelFrame.pvp:Hide();
@@ -167,7 +157,7 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 			-- filter armor of different type
 		else
 			-- collected
-			if app.Items[v].collected or (ItemCache[v] and ItemCache[v].c) then
+			if app.Items[v].collected or ItemCache[v] then
 				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 			end
 			-- rwp
@@ -206,13 +196,13 @@ function AppearanceModelFrame_LoadWithFilter()
 	-- for shirt or tabard
 	if filterSlot == 5 or filterSlot == 6 then
 		subclass = 0;
-	-- for back
+		-- for back
 	elseif filterSlot == 3 then
 		subclass = 1;
-	-- armor
+		-- armor
 	elseif filterSlot >= 1 and filterSlot <= 12 then
 		subclass = filterArmorType;
-	-- weapon+ranged
+		-- weapon+ranged
 	elseif filterSlot == 14 then
 		type = filters[filterSlot][1]["Type"];
 		-- ranged
@@ -220,7 +210,7 @@ function AppearanceModelFrame_LoadWithFilter()
 			type = filters[filterSlot][2]["Type"];
 		end
 		subclass = filterWeaponType;
-	-- shield+offhand
+		-- shield+offhand
 	elseif filterSlot == 16 then
 		type = filters[filterSlot][1]["Type"];
 		-- ranged
@@ -238,11 +228,11 @@ function AppearanceModelFrame_LoadWithFilter()
 		bonusPage = 1;
 	end
 	maxPage = math.floor(#listAppearances / 20) + bonusPage;
-	pageText:SetText(currentPage.." / "..maxPage);
+	pageText:SetText(currentPage .. " / " .. maxPage);
 
 	local count = 0;
 	-- 1 : 1...20 / 2 : 21...40
-	for i = (currentPage-1)*20+1, currentPage*20 do
+	for i = (currentPage - 1) * 20 + 1, currentPage * 20 do
 		ModelFrames[count].selected:Hide();
 		if listAppearances[i] then
 			ModelFrames[count]:Show();
@@ -258,16 +248,16 @@ end
 function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 	local list = {};
 	local count = 1;
-	
+
 	local listAppearances = app.AppearancesByTypes[type][subclass];
-	for i=1, #listAppearances do
+	for i = 1, #listAppearances do
 		local found = false;
 		local appearanceId = listAppearances[i];
 
 		if app.ItemsByAppearances[appearanceId] then
 			local listItems = app.ItemsByAppearances[appearanceId].i;
 
-			for j=1, #listItems do
+			for j = 1, #listItems do
 				local item = app.Items[listItems[j]];
 				if filterGrey and (item.q == 0 or item.q == 1) then
 					-- filter grey
@@ -282,6 +272,6 @@ function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 			count = count + 1;
 		end
 	end
-	
+
 	return list;
 end
