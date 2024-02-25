@@ -17,7 +17,7 @@ function InitDatabase()
 		local sourceCraft;
 		local sourceDrop;
 
-		for k,v in pairs(attItem) do
+		for k, v in pairs(attItem) do
 			-- boe
 			if v.b and v.b ~= 1 then
 				app.Items[itemId].boe = 1;
@@ -48,15 +48,15 @@ function InitDatabase()
 				if quest.total and quest.progress == quest.total then
 					app.Items[itemId].collected = 1;
 				end
-			-- craft
+				-- craft
 			elseif v.parent and v.parent.parent and (v.parent.parent.professionID
-											or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then
+					or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then
 				app.Items[itemId].sourceCraft = 1;
-			-- loot from npc
+				-- loot from npc
 			elseif v.parent and (v.parent.npcID
-							or (v.parent.parent and (v.parent.parent.npcID
-											-- loot from instance zone
-											or (v.parent.parent.parent and v.parent.parent.parent.instanceID)))) then
+					or (v.parent.parent and (v.parent.parent.npcID
+						-- loot from instance zone
+						or (v.parent.parent.parent and v.parent.parent.parent.instanceID)))) then
 				app.Items[itemId].sourceDrop = 1;
 			end
 		end
@@ -87,16 +87,16 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 	-- armor
 	if slot >= 1 and slot <= 12 then
 		subclass = item.s;
-	-- weapon
+		-- weapon
 	elseif slot == 14 then
 		subclass = typesToWeaponSubclasses[item.s];
-	-- offhand
+		-- offhand
 	elseif slot == 16 then
 		subclass = typesToOffhandSubclasses[item.s];
 	end
 
 	-- itemlink
-	local text = color.."\124Hitem:"..itemId.."::::::::80:::::\124h["..item.n.."]\124h\124r";
+	local text = color .. "\124Hitem:" .. itemId .. "::::::::80:::::\124h[" .. item.n .. "]\124h\124r";
 
 	-- different type/subclass
 	if slot ~= parentSlot or subclass ~= parentSubclass then
@@ -106,13 +106,13 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 			if subclass >= 1 and subclass <= 4 then
 				type = armorType[subclass];
 			end
-			text = text.." \124cffFF0000("..type..")\124r";
-		-- weapon
+			text = text .. " \124cffFF0000(" .. type .. ")\124r";
+			-- weapon
 		elseif slot == 14 then
-			text = text.." \124cffFF0000("..weaponType[subclass].name..")\124r";
-		-- offhand
+			text = text .. " \124cffFF0000(" .. weaponType[subclass].name .. ")\124r";
+			-- offhand
 		elseif slot == 16 then
-			text = text.." \124cffFF0000("..offhandType[subclass].name..")\124r";
+			text = text .. " \124cffFF0000(" .. offhandType[subclass].name .. ")\124r";
 		end
 	end
 
@@ -120,29 +120,29 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 	local bonus = "";
 	-- rwp
 	if item.rwp then
-		bonus = bonus.."\124cFFFFAAAA RWP\124r";
+		bonus = bonus .. "\124cFFFFAAAA RWP\124r";
 	end
 	-- pvp
 	if item.pvp then
-		bonus = bonus.."\124cFF00FEDD PVP\124r";
+		bonus = bonus .. "\124cFF00FEDD PVP\124r";
 	end
 	-- boe
 	if item.boe then
-		bonus = bonus.."\124r B";
+		bonus = bonus .. "\124r B";
 	end
 
 	-- quest
 	if item.sourceQuest then
-		bonus = bonus.."\124cFFFFD700 Q\124r";
-	-- craft
+		bonus = bonus .. "\124cFFFFD700 Q\124r";
+		-- craft
 	elseif item.sourceCraft then
-		bonus = bonus.."\124cFFC45F06 C\124r";
-	-- drop
+		bonus = bonus .. "\124cFFC45F06 C\124r";
+		-- drop
 	elseif item.sourceDrop then
-		bonus = bonus.."\124cFF3D85C6 D\124r";
+		bonus = bonus .. "\124cFF3D85C6 D\124r";
 	end
 
-	text = text..bonus;
+	text = text .. bonus;
 
 	return text;
 end

@@ -33,20 +33,20 @@ local MinimapShapes = {
 	-- quadrant booleans (same order as SetTexCoord)
 	-- {bottom-right, bottom-left, top-right, top-left}
 	-- true = rounded, false = squared
-	["ROUND"]			= {true,  true,  true,  true },
-	["SQUARE"]			= {false, false, false, false},
-	["CORNER-TOPLEFT"]		= {false, false, false, true },
-	["CORNER-TOPRIGHT"]		= {false, false, true,  false},
-	["CORNER-BOTTOMLEFT"]		= {false, true,  false, false},
-	["CORNER-BOTTOMRIGHT"]		= {true,  false, false, false},
-	["SIDE-LEFT"]			= {false, true,  false, true },
-	["SIDE-RIGHT"]			= {true,  false, true,  false},
-	["SIDE-TOP"]			= {false, false, true,  true },
-	["SIDE-BOTTOM"]		= {true,  true,  false, false},
-	["TRICORNER-TOPLEFT"]		= {false, true,  true,  true },
-	["TRICORNER-TOPRIGHT"]		= {true,  false, true,  true },
-	["TRICORNER-BOTTOMLEFT"]	= {true,  true,  false, true },
-	["TRICORNER-BOTTOMRIGHT"]	= {true,  true,  true,  false},
+	["ROUND"]                 = { true, true, true, true },
+	["SQUARE"]                = { false, false, false, false },
+	["CORNER-TOPLEFT"]        = { false, false, false, true },
+	["CORNER-TOPRIGHT"]       = { false, false, true, false },
+	["CORNER-BOTTOMLEFT"]     = { false, true, false, false },
+	["CORNER-BOTTOMRIGHT"]    = { true, false, false, false },
+	["SIDE-LEFT"]             = { false, true, false, true },
+	["SIDE-RIGHT"]            = { true, false, true, false },
+	["SIDE-TOP"]              = { false, false, true, true },
+	["SIDE-BOTTOM"]           = { true, true, false, false },
+	["TRICORNER-TOPLEFT"]     = { false, true, true, true },
+	["TRICORNER-TOPRIGHT"]    = { true, false, true, true },
+	["TRICORNER-BOTTOMLEFT"]  = { true, true, false, true },
+	["TRICORNER-BOTTOMRIGHT"] = { true, true, true, false },
 };
 button.update = function(self)
 	local angle = math.rad(position);
@@ -59,8 +59,8 @@ button.update = function(self)
 	if MinimapShapes[GetMinimapShape and GetMinimapShape() or "ROUND"][q] then
 		x, y = x * width, y * height;
 	else
-		x = math.max(-width, math.min(x*(math.sqrt(2*(width)^2)-rounding), width));
-		y = math.max(-height, math.min(y*(math.sqrt(2*(height)^2)-rounding), height));
+		x = math.max(-width, math.min(x * (math.sqrt(2 * (width) ^ 2) - rounding), width));
+		y = math.max(-height, math.min(y * (math.sqrt(2 * (height) ^ 2) - rounding), height));
 	end
 	self:SetPoint("CENTER", "Minimap", "CENTER", math.floor(x), math.floor(y));
 end

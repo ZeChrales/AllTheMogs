@@ -10,25 +10,25 @@ function ItemCacheMixin:OnLoad()
     -- savedvariables cache
     if ItemCache == nil then
         ItemCache = {};
-	end
+    end
     if CharacterInventory == nil then
-	    CharacterInventory = {};
-	end
+        CharacterInventory = {};
+    end
     if CharacterInventory[playerGuid] == nil then
-	    CharacterInventory[playerGuid] = {};
-	end
+        CharacterInventory[playerGuid] = {};
+    end
     if CharacterInventory[playerGuid]["e"] == nil then
         CharacterInventory[playerGuid]["e"] = {};
-	end
+    end
     if CharacterInventory[playerGuid]["b"] == nil then
         CharacterInventory[playerGuid]["b"] = {};
-	end
+    end
     if CharacterInventory[playerGuid]["m"] == nil then
         CharacterInventory[playerGuid]["m"] = {};
-	end
+    end
     if GuildBankInventory == nil then
-	    GuildBankInventory = {};
-	end
+        GuildBankInventory = {};
+    end
 
     -- bag updated
     self:RegisterEvent("BAG_UPDATE");
@@ -66,7 +66,7 @@ function ItemCacheMixin:OnEvent(eventName, ...)
         self:ParseBankBags();
     elseif eventName == "MAIL_INBOX_UPDATE" then
         self:ParseMails();
-	end
+    end
 end
 
 -- parse all equipment
@@ -74,7 +74,7 @@ function ItemCacheMixin:ParseEquipment()
     for slot = 0, C_Container.ContainerIDToInventoryID(1) - 1 do
         local itemId = GetInventoryItemID("player", slot);
         self:UpdateItem(itemId, CharacterInventory, "e", slot, 1);
-	end
+    end
 end
 
 -- parse all mails
@@ -85,10 +85,10 @@ function ItemCacheMixin:ParseMails()
             if link then
                 local _, itemId = GetInboxItem(mail, attachment)
                 self:UpdateItem(itemId, CharacterInventory, "m", mail, attachment);
-            -- item mail has been retrieved, so delete it
+                -- item mail has been retrieved, so delete it
             elseif CharacterInventory[playerGuid]["m"][mail] and CharacterInventory[playerGuid]["m"][mail][attachment] then
                 local previous = CharacterInventory[playerGuid]["m"][mail][attachment];
-                local key = playerGuid.."-m"..mail;
+                local key = playerGuid .. "-m" .. mail;
                 self:RemoveItemFromCache(previous, mail);
             end
         end
@@ -99,14 +99,14 @@ end
 function ItemCacheMixin:ParseBankBags()
     for bag = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
         self:ParseBag(bag);
-	end
+    end
 end
 
 -- parse all bags
 function ItemCacheMixin:ParseBags()
     for bag = 0, NUM_BAG_SLOTS do
         self:ParseBag(bag);
-	end
+    end
 end
 
 -- parse bag
@@ -115,7 +115,7 @@ function ItemCacheMixin:ParseBag(bag)
         local location = ItemLocation:CreateFromBagAndSlot(bag, slot)
         local itemId = C_Item.DoesItemExist(location) and C_Item.GetItemID(location)
         self:UpdateItem(itemId, CharacterInventory, "b", bag, slot);
-	end
+    end
 end
 
 -- update item
@@ -126,28 +126,28 @@ end
 function ItemCacheMixin:UpdateItem(itemId, table, name, container, slot)
     -- only if item is in database
     if not self:IsItemInDatabase(itemId) then
-	    return;
-	end
+        return;
+    end
     --print("updateitem "..itemId.." "..name.." "..container.." "..slot);
 
-    local key = playerGuid.."-"..name..container;
+    local key = playerGuid .. "-" .. name .. container;
 
     if table[playerGuid][name][container] == nil then
-	    table[playerGuid][name][container] = {};
-	end
+        table[playerGuid][name][container] = {};
+    end
 
     local previous = table[playerGuid][name][container][slot];
-	if previous and previous ~= itemId then
+    if previous and previous ~= itemId then
         ItemCacheMixin:RemoveItemFromCache(previous, key);
-	end
+    end
     if ItemCache[itemId] == nil then
-	    ItemCache[itemId] = {};
-	end
+        ItemCache[itemId] = {};
+    end
     if ItemCache[itemId][key] then
         ItemCache[itemId][key] = ItemCache[itemId][key] + 1;
-	else
-	    ItemCache[itemId][key] = 1;
-	end
+    else
+        ItemCache[itemId][key] = 1;
+    end
     table[playerGuid][name][container][slot] = itemId;
 end
 
@@ -164,9 +164,9 @@ function ItemCacheMixin:UpdateItemCache(itemId)
         end
         if ItemCache[itemId].c == nil then
             ItemCache[itemId].c = {};
-		end
+        end
         ItemCache[itemId].c[playerGuid] = 1;
-	end
+    end
 end
 
 -- remove item from cache
@@ -180,8 +180,8 @@ function ItemCacheMixin:RemoveItemFromCache(itemId, key)
             ItemCache[itemId][key] = nil;
         else
             ItemCache[itemId][key] = newCount;
-		end
-	end
+        end
+    end
 end
 
 -- check if an item is in database (with an appearance)

@@ -25,7 +25,8 @@ end
 
 --------------------------------------------------------------------
 
-local ClassicTransmogFrame = CreateFrame("Frame", "ClassicTransmogFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
+local ClassicTransmogFrame = CreateFrame("Frame", "ClassicTransmogFrame", UIParent,
+	BackdropTemplateMixin and "BackdropTemplate")
 -- register frame so it's closable
 _G["MyFrame"] = ClassicTransmogFrame;
 tinsert(UISpecialFrames, ClassicTransmogFrame:GetName());
@@ -97,7 +98,7 @@ end)
 -- current page
 pageText = ContentFrame:CreateFontString(nil, "OVERLAY", "GameTooltipText");
 pageText:SetPoint("RIGHT", pagePrevious, "LEFT", -5, 0);
-pageText:SetText(currentPage.."/x");
+pageText:SetText(currentPage .. "/x");
 
 -- details
 
