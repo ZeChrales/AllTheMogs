@@ -27,7 +27,7 @@ function AppearanceDetailFrame_Load(appearanceId)
 		local itemId = listItems[i];
 		local name = app.Items[itemId].n;
 		local quality = app.Items[itemId].q;
-		if filterGrey and quality <= 1 then
+		if app.filterGrey and quality <= 1 then
 			-- grey filter
 		else
 			local parentSubclass;

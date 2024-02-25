@@ -41,14 +41,14 @@ local function ShowAppearances(tooltip)
 		for i = 1, #listItems do
 			local sharedItemId = listItems[i];
 			local quality = app.Items[sharedItemId].q;
-			if filterGrey and quality <= 1 then
+			if app.filterGrey and quality <= 1 then
 				-- filter grey
 			else
 				local text = GetItemText(sharedItemId, parentSlot, parentSubclass);
 
 				-- completed state
 				local check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\unknown" .. ":0\124t";
-				if app.Items[sharedItemId].collected or ItemCache[sharedItemId] then
+				if app.Items[sharedItemId].collected or ATM_ItemCache[sharedItemId] then
 					check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\known_circle" .. ":0\124t";
 				end
 

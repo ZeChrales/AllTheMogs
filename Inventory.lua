@@ -1,6 +1,6 @@
 local appName, app = ...;
 -- item cache : bags, equipment, mail, bank, guildbank
-ItemCacheMixin = {}
+ItemCacheMixin = {};
 
 -- played GUID
 local playerGuid = UnitGUID("player");
@@ -8,23 +8,23 @@ local playerGuid = UnitGUID("player");
 -- init
 function ItemCacheMixin:OnLoad()
     -- savedvariables cache
-    if ItemCache == nil then
-        ItemCache = {};
+    if ATM_ItemCache == nil then
+        ATM_ItemCache = {};
     end
-    if CharacterInventory == nil then
-        CharacterInventory = {};
+    if ATM_CharacterInventory == nil then
+        ATM_CharacterInventory = {};
     end
-    if CharacterInventory[playerGuid] == nil then
-        CharacterInventory[playerGuid] = {};
+    if ATM_CharacterInventory[playerGuid] == nil then
+        ATM_CharacterInventory[playerGuid] = {};
     end
-    if CharacterInventory[playerGuid]["e"] == nil then
-        CharacterInventory[playerGuid]["e"] = {};
+    if ATM_CharacterInventory[playerGuid]["e"] == nil then
+        ATM_CharacterInventory[playerGuid]["e"] = {};
     end
-    if CharacterInventory[playerGuid]["b"] == nil then
-        CharacterInventory[playerGuid]["b"] = {};
+    if ATM_CharacterInventory[playerGuid]["b"] == nil then
+        ATM_CharacterInventory[playerGuid]["b"] = {};
     end
-    if CharacterInventory[playerGuid]["m"] == nil then
-        CharacterInventory[playerGuid]["m"] = {};
+    if ATM_CharacterInventory[playerGuid]["m"] == nil then
+        ATM_CharacterInventory[playerGuid]["m"] = {};
     end
     if GuildBankInventory == nil then
         GuildBankInventory = {};
@@ -58,7 +58,7 @@ function ItemCacheMixin:OnEvent(eventName, ...)
             return;
         end
         local itemId = GetInventoryItemID("player", slot);
-        self:UpdateItem(itemId, CharacterInventory, "e", slot, 1);
+        self:UpdateItem(itemId, ATM_CharacterInventory, "e", slot, 1);
     elseif eventName == "BAG_UPDATE" then
         local bag = ...;
         self:ParseBag(bag);
@@ -73,7 +73,7 @@ end
 function ItemCacheMixin:ParseEquipment()
     for slot = 0, C_Container.ContainerIDToInventoryID(1) - 1 do
         local itemId = GetInventoryItemID("player", slot);
-        self:UpdateItem(itemId, CharacterInventory, "e", slot, 1);
+        self:UpdateItem(itemId, ATM_CharacterInventory, "e", slot, 1);
     end
 end
 
@@ -84,10 +84,10 @@ function ItemCacheMixin:ParseMails()
             local link = GetInboxItemLink(mail, attachment);
             if link then
                 local _, itemId = GetInboxItem(mail, attachment)
-                self:UpdateItem(itemId, CharacterInventory, "m", mail, attachment);
+                self:UpdateItem(itemId, ATM_CharacterInventory, "m", mail, attachment);
                 -- item mail has been retrieved, so delete it
-            elseif CharacterInventory[playerGuid]["m"][mail] and CharacterInventory[playerGuid]["m"][mail][attachment] then
-                local previous = CharacterInventory[playerGuid]["m"][mail][attachment];
+            elseif ATM_CharacterInventory[playerGuid]["m"][mail] and ATM_CharacterInventory[playerGuid]["m"][mail][attachment] then
+                local previous = ATM_CharacterInventory[playerGuid]["m"][mail][attachment];
                 local key = playerGuid .. "-m" .. mail;
                 self:RemoveItemFromCache(previous, mail);
             end
@@ -114,12 +114,12 @@ function ItemCacheMixin:ParseBag(bag)
     for slot = 1, C_Container.GetContainerNumSlots(bag) do
         local location = ItemLocation:CreateFromBagAndSlot(bag, slot)
         local itemId = C_Item.DoesItemExist(location) and C_Item.GetItemID(location)
-        self:UpdateItem(itemId, CharacterInventory, "b", bag, slot);
+        self:UpdateItem(itemId, ATM_CharacterInventory, "b", bag, slot);
     end
 end
 
 -- update item
--- table : CharacterInventory, GuildBankInventory
+-- table : ATM_CharacterInventory, ATM_GuildBankInventory
 -- name : b=bag, e=equipment, m=mail ...
 -- container : bag id or equipement id
 -- slot : bag slot id or 1 for equipment
@@ -140,13 +140,13 @@ function ItemCacheMixin:UpdateItem(itemId, table, name, container, slot)
     if previous and previous ~= itemId then
         ItemCacheMixin:RemoveItemFromCache(previous, key);
     end
-    if ItemCache[itemId] == nil then
-        ItemCache[itemId] = {};
+    if ATM_ItemCache[itemId] == nil then
+        ATM_ItemCache[itemId] = {};
     end
-    if ItemCache[itemId][key] then
-        ItemCache[itemId][key] = ItemCache[itemId][key] + 1;
+    if ATM_ItemCache[itemId][key] then
+        ATM_ItemCache[itemId][key] = ATM_ItemCache[itemId][key] + 1;
     else
-        ItemCache[itemId][key] = 1;
+        ATM_ItemCache[itemId][key] = 1;
     end
     table[playerGuid][name][container][slot] = itemId;
 end
@@ -159,27 +159,27 @@ end
 function ItemCacheMixin:UpdateItemCache(itemId)
     -- check if item is in database
     if itemId and app.Items[itemId] and app.ItemsByAppearances[app.Items[itemId].a] then
-        if ItemCache[itemId] == nil then
-            ItemCache[itemId] = {};
+        if ATM_ItemCache[itemId] == nil then
+            ATM_ItemCache[itemId] = {};
         end
-        if ItemCache[itemId].c == nil then
-            ItemCache[itemId].c = {};
+        if ATM_ItemCache[itemId].c == nil then
+            ATM_ItemCache[itemId].c = {};
         end
-        ItemCache[itemId].c[playerGuid] = 1;
+        ATM_ItemCache[itemId].c[playerGuid] = 1;
     end
 end
 
 -- remove item from cache
 function ItemCacheMixin:RemoveItemFromCache(itemId, key)
-    if ItemCache[itemId] and ItemCache[itemId][key] then
-        local previousCount = ItemCache[itemId][key];
+    if ATM_ItemCache[itemId] and ATM_ItemCache[itemId][key] then
+        local previousCount = ATM_ItemCache[itemId][key];
         local newCount = previousCount - 1;
         if newCount <= 0 then
-            --table.removekey(ItemCache[itemId], key);
+            --table.removekey(ATM_ItemCache[itemId], key);
             --print("removing "..key);
-            ItemCache[itemId][key] = nil;
+            ATM_ItemCache[itemId][key] = nil;
         else
-            ItemCache[itemId][key] = newCount;
+            ATM_ItemCache[itemId][key] = newCount;
         end
     end
 end

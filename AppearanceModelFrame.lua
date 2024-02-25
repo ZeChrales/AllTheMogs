@@ -151,13 +151,13 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 
 	for k, v in pairs(app.ItemsByAppearances[appearanceId].i) do
 		local subclass = app.Items[v].s;
-		if filterGrey and app.Items[v].q <= 1 then
+		if app.filterGrey and app.Items[v].q <= 1 then
 			-- filter grey
 		elseif filterSlot >= 1 and filterSlot <= 12 and subclass ~= filterArmorType and subclass ~= 0 then
 			-- filter armor of different type
 		else
 			-- collected
-			if app.Items[v].collected or ItemCache[v] then
+			if app.Items[v].collected or ATM_ItemCache[v] then
 				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
 			end
 			-- rwp
@@ -259,7 +259,7 @@ function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 
 			for j = 1, #listItems do
 				local item = app.Items[listItems[j]];
-				if filterGrey and (item.q == 0 or item.q == 1) then
+				if app.filterGrey and (item.q == 0 or item.q == 1) then
 					-- filter grey
 				else
 					found = true;

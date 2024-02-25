@@ -17,12 +17,6 @@ currentPage = 1;
 -- max page
 maxPage = 1;
 
--- grey/white filter
-filterGrey = true;
-if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-	filterGrey = false;
-end
-
 --------------------------------------------------------------------
 
 local ClassicTransmogFrame = CreateFrame("Frame", "ClassicTransmogFrame", UIParent,
@@ -136,6 +130,11 @@ frame:SetScript("OnEvent", function()
 	Mixin(itemCache, ItemCacheMixin);
 	itemCache:OnLoad();
 	itemCache:SetScript("OnEvent", itemCache.OnEvent);
+
+	-- init interface options
+	local interfaceOptions = CreateFrame("Frame");
+	Mixin(interfaceOptions, InterfaceOptionsMixin);
+	interfaceOptions:OnLoad();
 end)
 
 
