@@ -43,7 +43,7 @@ function AppearanceDetailFrame_Load(appearanceId)
 			end
 
 			local item = AppearanceDetailItem_Get(count);
-			item.itemLink = COLOR_STRINGS[quality] .. "\124Hitem:" ..
+			item.itemLink = app.COLOR_STRINGS[quality] .. "\124Hitem:" ..
 			itemId .. "::::::::80:::::\124h[" .. name .. "]\124h\124r";
 
 			local text = GetItemText(itemId, filterSlot, parentSubclass);

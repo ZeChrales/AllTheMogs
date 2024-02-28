@@ -1,19 +1,19 @@
 local appName, app = ...;
 
--- savedvariables options
+-- Interface options
 InterfaceOptionsMixin = {};
+
+-- savedvariables
+if ATM_InterfaceOptions == nil then
+    ATM_InterfaceOptions = {};
+    ATM_InterfaceOptions.filterGrey = true;
+    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        ATM_InterfaceOptions.filterGrey = false;
+    end
+end
 
 -- init
 function InterfaceOptionsMixin:OnLoad()
-    if ATM_InterfaceOptions == nil then
-        print("reset options");
-        ATM_InterfaceOptions = {};
-        ATM_InterfaceOptions.filterGrey = true;
-        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-            ATM_InterfaceOptions.filterGrey = false;
-        end
-    end
-
     -- Interface Options for addon
     self.name = "AllTheMogs";
     InterfaceOptions_AddCategory(self);

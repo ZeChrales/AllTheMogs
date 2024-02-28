@@ -1,6 +1,9 @@
 local appName, app = ...;
 -- Appearance models
 
+local gender = UnitSex("player") - 1;
+local _, _, race = UnitRace("player");
+
 local ModelFrames = {};
 local selected = 0;
 
@@ -10,100 +13,122 @@ function AppearanceModelFrame_Init(parentFrame)
 	for i = 0, 19 do
 		local line = math.floor(i / 5) + 1;
 		local column = i % 5 + 1;
-		local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame);
+
+		-- to debug, ModelWithControlsTemplate + EnableMouse
+		local ModelFrame = CreateFrame("DressUpModel", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame,
+			"ModelTemplate");
+		--local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame);
 		if lastFrame == nil then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 5, -5);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -20);
 		elseif column == 1 then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 5, -(line - 1) * 100 - 5);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -((line - 1) * 105) - 20);
 		else
-			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 0, 0);
+			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 10, 0);
 		end
 		lastFrame = ModelFrame;
-		ModelFrame:SetSize(100, 100);
+		ModelFrame:SetSize(78, 104);
+		local lightValues = {
+			omnidirectional = false,
+			point = CreateVector3D(-1, 1, -1),
+			ambientIntensity = 1.05,
+			ambientColor =
+				CreateColor(1, 1, 1),
+			diffuseIntensity = 0,
+			diffuseColor = CreateColor(1, 1, 1)
+		};
+		ModelFrame:SetLight(true, lightValues);
+		--ModelFrame.EnableMouse(false);
 
 		-- background
 		ModelFrame.background = ModelFrame:CreateTexture(nil, "BACKGROUND");
-		ModelFrame.background:SetPoint("CENTER")
-		ModelFrame.background:SetSize(100, 100);
-		ModelFrame.background:SetTexture("Interface\\Transmogrify\\Transmogrify");
-		ModelFrame.background:SetAtlas("transmog-wardrobe-border-uncollected");
+		ModelFrame.background:SetColorTexture(0, 0, 0);
+		ModelFrame.background:SetAllPoints();
+
+		-- border
+		ModelFrame.border = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.border:SetPoint("CENTER", 0, -3);
+		ModelFrame.border:SetTexture("Interface\\Transmogrify\\Transmogrify");
+		ModelFrame.border:SetAtlas("transmog-wardrobe-border-uncollected", true);
+		ModelFrame.border:SetDrawLayer("OVERLAY", -1);
 
 		-- highlight
 		ModelFrame.highlight = ModelFrame:CreateTexture(nil, "HIGHLIGHT");
-		ModelFrame.highlight:SetPoint("CENTER")
-		ModelFrame.highlight:SetSize(100, 100);
+		ModelFrame.highlight:SetPoint("CENTER");
 		ModelFrame.highlight:SetTexture("Interface\\Transmogrify\\Transmogrify");
-		ModelFrame.highlight:SetAtlas("transmog-wardrobe-border-highlighted");
+		ModelFrame.highlight:SetAtlas("transmog-wardrobe-border-highlighted", true);
 		ModelFrame.highlight:SetBlendMode("ADD");
 
 		-- selected
 		ModelFrame.selected = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.selected:SetPoint("CENTER")
-		ModelFrame.selected:SetSize(100, 100);
+		ModelFrame.selected:SetPoint("CENTER");
 		ModelFrame.selected:SetTexture("Interface\\Transmogrify\\Transmogrify");
-		ModelFrame.selected:SetAtlas("transmog-wardrobe-border-current");
+		ModelFrame.selected:SetAtlas("transmog-wardrobe-border-current", true);
 		ModelFrame.selected:SetBlendMode("ADD");
 
 		-- to debug, ModelWithControlsTemplate + EnableMouse
-		ModelFrame.modelFrame = CreateFrame("DressUpModel", nil, ModelFrame, "ModelTemplate");
-		ModelFrame.modelFrame:SetSize(85, 85);
-		ModelFrame.modelFrame:SetPoint("CENTER");
-		ModelFrame.modelFrame:EnableMouse(false);
+		--ModelFrame.modelFrame = CreateFrame("DressUpModel", nil, ModelFrame, "ModelTemplate");
+		--ModelFrame.modelFrame:SetSize(85, 85);
+		--ModelFrame.modelFrame:SetSize(85, 100);
+		--ModelFrame.modelFrame:SetPoint("CENTER");
+		--ModelFrame.modelFrame:EnableMouse(false);
 		--ModelFrame.modelFrame:SetModel("Item/ObjectComponents/Head/Helm_Goggles_Xray_A_01_BeF.m2");
-		ModelFrame.modelFrame:SetPortraitZoom(0.8);
-		ModelFrame.modelFrame:SetRotation(0.2);
-		ModelFrame.modelFrame:FreezeAnimation(60, 0, 55);
-		ModelFrame.modelFrame:SetUnit("player");
-		ModelFrame.modelFrame:Undress();
+		--ModelFrame.modelFrame:SetPortraitZoom(0.8);
+		--ModelFrame.modelFrame:SetRotation(0.2);
+		--ModelFrame.modelFrame:FreezeAnimation(60, 0, 55);
+		--ModelFrame.modelFrame:SetUnit("player", false);
+		--ModelFrame.modelFrame:Undress();
+		--ModelFrame.modelFrame:SetDoBlend(false);
+		--ModelFrame.modelFrame:SetKeepModelOnHide(true);
+		--ModelFrame.modelFrame:MakeCurrentCameraCustom();
 		--ModelFrame.modelFrame:SetSheathed(false);
 		--ModelFrame.modelFrame:TryOn("item:"..38276);
 		--ModelFrame.modelFrame:SetUseTransmogSkin(true);
 
 		-- rwp
-		ModelFrame.modelFrame.rwp = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.rwp:SetPoint("TOPLEFT", ModelFrame, "TOPLEFT", 0, 0);
-		ModelFrame.modelFrame.rwp:SetSize(28, 28);
-		ModelFrame.modelFrame.rwp:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.modelFrame.rwp:SetAtlas("XMarksTheSpot");
+		ModelFrame.rwp = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.rwp:SetPoint("TOPLEFT", ModelFrame, "TOPLEFT", 0, 0);
+		ModelFrame.rwp:SetSize(28, 28);
+		ModelFrame.rwp:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.rwp:SetAtlas("XMarksTheSpot");
 
 		-- boe
-		ModelFrame.modelFrame.boe = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.boe:SetPoint("TOP", ModelFrame, "TOP", 0, 0);
-		ModelFrame.modelFrame.boe:SetSize(24, 24);
-		ModelFrame.modelFrame.boe:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.modelFrame.boe:SetAtlas("Banker");
+		ModelFrame.boe = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.boe:SetPoint("TOP", ModelFrame, "TOP", 0, 0);
+		ModelFrame.boe:SetSize(24, 24);
+		ModelFrame.boe:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.boe:SetAtlas("Banker");
 
 		-- pvp
-		ModelFrame.modelFrame.pvp = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.pvp:SetPoint("TOPRIGHT", ModelFrame, "TOPRIGHT", 0, 0);
-		ModelFrame.modelFrame.pvp:SetSize(28, 28);
-		ModelFrame.modelFrame.pvp:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.pvp = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.pvp:SetPoint("TOPRIGHT", ModelFrame, "TOPRIGHT", 0, 0);
+		ModelFrame.pvp:SetSize(28, 28);
+		ModelFrame.pvp:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		if UnitFactionGroup("player") == "Horde" then
-			ModelFrame.modelFrame.pvp:SetAtlas("poi-horde");
+			ModelFrame.pvp:SetAtlas("poi-horde");
 		else
-			ModelFrame.modelFrame.pvp:SetAtlas("poi-alliance");
+			ModelFrame.pvp:SetAtlas("poi-alliance");
 		end
 
 		-- quest
-		ModelFrame.modelFrame.quest = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.quest:SetPoint("BOTTOMLEFT", ModelFrame, "BOTTOMLEFT", -5, 0);
-		ModelFrame.modelFrame.quest:SetSize(32, 32);
-		ModelFrame.modelFrame.quest:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.modelFrame.quest:SetAtlas("QuestNormal");
+		ModelFrame.quest = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.quest:SetPoint("BOTTOMLEFT", ModelFrame, "BOTTOMLEFT", -5, 0);
+		ModelFrame.quest:SetSize(32, 32);
+		ModelFrame.quest:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.quest:SetAtlas("QuestNormal");
 
 		-- craft
-		ModelFrame.modelFrame.craft = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.craft:SetPoint("BOTTOM", ModelFrame, "BOTTOM", 0, 0);
-		ModelFrame.modelFrame.craft:SetSize(32, 32);
-		ModelFrame.modelFrame.craft:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.modelFrame.craft:SetAtlas("Profession");
+		ModelFrame.craft = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.craft:SetPoint("BOTTOM", ModelFrame, "BOTTOM", 0, 0);
+		ModelFrame.craft:SetSize(32, 32);
+		ModelFrame.craft:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.craft:SetAtlas("Profession");
 
 		-- drop
-		ModelFrame.modelFrame.drop = ModelFrame.modelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.modelFrame.drop:SetPoint("BOTTOMRIGHT", ModelFrame, "BOTTOMRIGHT", 0, 0);
-		ModelFrame.modelFrame.drop:SetSize(32, 32);
-		ModelFrame.modelFrame.drop:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.modelFrame.drop:SetAtlas("DungeonSkull");
+		ModelFrame.drop = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.drop:SetPoint("BOTTOMRIGHT", ModelFrame, "BOTTOMRIGHT", 0, 0);
+		ModelFrame.drop:SetSize(32, 32);
+		ModelFrame.drop:SetTexture("Interface\\Minimap\\objecticonsatlas");
+		ModelFrame.drop:SetAtlas("DungeonSkull");
 
 		ModelFrame:SetScript("OnMouseDown", function()
 			if selected ~= i then
@@ -126,28 +151,69 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	local ModelFrame = ModelFrames[frameId];
 	ModelFrame.appearanceId = appearanceId;
 
-	-- change zoom/position depending on slot
-	ModelFrame.modelFrame:SetPortraitZoom(0.8);
-	ModelFrame.modelFrame:SetRotation(CAM_POS[filterSlot].Rotation);
-	ModelFrame.modelFrame:SetPosition(CAM_POS[filterSlot].Position[1], CAM_POS[filterSlot].Position[2],
-		CAM_POS[filterSlot].Position[3]);
-		ModelFrame.modelFrame:SetPortraitZoom(CAM_POS[filterSlot].Zoom);
+	ModelFrame:SetUnit("player", false);
+	ModelFrame:Undress();
+	ModelFrame:SetDoBlend(false);
+	ModelFrame:SetKeepModelOnHide(true);
 
-	ModelFrame:Show();
-	ModelFrame.modelFrame:Undress();
+	-- change zoom/position depending on slot
+	--ModelFrame.modelFrame:SetPortraitZoom(0.8);
+	--ModelFrame.modelFrame:SetRotation(CAM_POS[filterSlot].Rotation);
+	--ModelFrame.modelFrame:SetPosition(CAM_POS[filterSlot].Position[1], CAM_POS[filterSlot].Position[2],
+	--	CAM_POS[filterSlot].Position[3]);
+	--	ModelFrame.modelFrame:SetPortraitZoom(CAM_POS[filterSlot].Zoom);
+
+	local camera = app.WEAPONS_CAMERAS[13];
+	if filterSlot < 13 then
+		camera = app.CLASSES_CAMERAS[race][gender][filterSlot];
+	elseif filterSlot == 14 then
+		camera = app.WEAPONS_CAMERAS[filterWeaponType];
+	elseif filterSlot == 16 then
+		camera = app.OFFHANDS_CAMERAS[filterOffhandType];
+	end
+	-- camera position from blizzard constants
+	ModelFrame:MakeCurrentCameraCustom();
+	ModelFrame:SetPosition(camera[1], camera[2], camera[3]);
+	ModelFrame:SetFacing(camera[4]);
+	ModelFrame:SetPitch(camera[5]);
+	ModelFrame:SetRoll(camera[6]);
+	ModelFrame:UseModelCenterToTransform(false);
+
+	-- move camera
+	local cameraX, cameraY, cameraZ = ModelFrame:TransformCameraSpaceToModelSpace(
+		MODELFRAME_UI_CAMERA_POSITION):GetXYZ();
+	local targetX, targetY, targetZ = ModelFrame:TransformCameraSpaceToModelSpace(MODELFRAME_UI_CAMERA_TARGET)
+		:GetXYZ();
+	ModelFrame:SetCameraPosition(cameraX, cameraY, cameraZ);
+	ModelFrame:SetCameraTarget(targetX, targetY, targetZ);
+
+	-- freeze
+	if (camera[7] and camera[8] ~= -1 and camera[9] ~= -1) then
+		ModelFrame:FreezeAnimation(camera[7], camera[9], camera[8]);
+	else
+		ModelFrame:SetAnimation(0, 0);
+	end
+
+	--ModelFrame.modelFrame:Undress();
 
 	-- get first item of an appearance
 	local itemId = app.ItemsByAppearances[appearanceId].i[1];
-	ModelFrame.modelFrame:TryOn("item:" .. itemId);
+
+	if filterSlot < 13 then
+		ModelFrame:TryOn("item:" .. itemId);
+	else
+		--ModelFrame:SetItemAppearance(appearanceId);
+		ModelFrame:SetItem(itemId);
+	end
 
 	-- collected
-	ModelFrame.background:SetAtlas("transmog-wardrobe-border-uncollected");
-	ModelFrame.modelFrame.rwp:Hide();
-	ModelFrame.modelFrame.boe:Hide();
-	ModelFrame.modelFrame.pvp:Hide();
-	ModelFrame.modelFrame.quest:Hide();
-	ModelFrame.modelFrame.craft:Hide();
-	ModelFrame.modelFrame.drop:Hide();
+	ModelFrame.border:SetAtlas("transmog-wardrobe-border-uncollected", true);
+	ModelFrame.rwp:Hide();
+	ModelFrame.boe:Hide();
+	ModelFrame.pvp:Hide();
+	ModelFrame.quest:Hide();
+	ModelFrame.craft:Hide();
+	ModelFrame.drop:Hide();
 
 	for k, v in pairs(app.ItemsByAppearances[appearanceId].i) do
 		local subclass = app.Items[v].s;
@@ -158,31 +224,31 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 		else
 			-- collected
 			if app.Items[v].collected or ATM_ItemCache[v] then
-				ModelFrame.background:SetAtlas("transmog-wardrobe-border-collected");
+				ModelFrame.border:SetAtlas("transmog-wardrobe-border-collected", true);
 			end
 			-- rwp
 			if app.Items[v].rwp then
-				ModelFrame.modelFrame.rwp:Show();
+				ModelFrame.rwp:Show();
 			end
 			-- boe
 			if app.Items[v].boe then
-				ModelFrame.modelFrame.boe:Show();
+				ModelFrame.boe:Show();
 			end
 			-- pvp
 			if app.Items[v].pvp then
-				ModelFrame.modelFrame.pvp:Show();
+				ModelFrame.pvp:Show();
 			end
 			-- quest
 			if app.Items[v].sourceQuest then
-				ModelFrame.modelFrame.quest:Show();
+				ModelFrame.quest:Show();
 			end
 			-- craft
 			if app.Items[v].sourceCraft then
-				ModelFrame.modelFrame.craft:Show();
+				ModelFrame.craft:Show();
 			end
 			-- drop
 			if app.Items[v].sourceDrop then
-				ModelFrame.modelFrame.drop:Show();
+				ModelFrame.drop:Show();
 			end
 		end
 	end
@@ -236,9 +302,11 @@ function AppearanceModelFrame_LoadWithFilter()
 		ModelFrames[count].selected:Hide();
 		if listAppearances[i] then
 			ModelFrames[count]:Show();
+			--ModelFrames[count].modelFrame:Show();
 			AppearanceModelFrame_Load(count, listAppearances[i]);
 		else
 			ModelFrames[count]:Hide();
+			--ModelFrames[count].modelFrame:Hide();
 		end
 		count = count + 1;
 	end

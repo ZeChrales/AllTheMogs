@@ -81,7 +81,7 @@ end
 -- build item text : name(hyperlink with color) + bonus from ATT
 function GetItemText(itemId, parentSlot, parentSubclass)
 	local item = app.Items[itemId];
-	local color = COLOR_STRINGS[item.q];
+	local color = app.COLOR_STRINGS[item.q];
 	local slot = typesToSlots[item.t];
 	local subclass;
 	-- armor

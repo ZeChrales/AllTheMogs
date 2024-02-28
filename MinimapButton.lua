@@ -2,6 +2,7 @@ local appName, app = ...;
 
 -- minimap button
 local button = CreateFrame("BUTTON", "AllTheMogsMinimap", Minimap);
+app.minimapButton = button;
 button:SetPoint("CENTER", 0, 0);
 button:SetFrameStrata("HIGH");
 button:SetMovable(true);
@@ -28,7 +29,7 @@ button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight"
 
 -- Button Configuration
 local rounding = 10;
-local position = 193.47782;
+
 local MinimapShapes = {
 	-- quadrant booleans (same order as SetTexCoord)
 	-- {bottom-right, bottom-left, top-right, top-left}
@@ -49,7 +50,8 @@ local MinimapShapes = {
 	["TRICORNER-BOTTOMRIGHT"] = { true, true, true, false },
 };
 button.update = function(self)
-	local angle = math.rad(position);
+	ATM_InterfaceOptions.minimapButtonPosition = ATM_InterfaceOptions.minimapButtonPosition or 193.47782;
+	local angle = math.rad(ATM_InterfaceOptions.minimapButtonPosition);
 	local x, y, q = math.cos(angle), math.sin(angle), 1;
 	if x < 0 then q = q + 1; end
 	if y > 0 then q = q + 2; end
@@ -68,7 +70,7 @@ local update = function(self)
 	local mx, my = Minimap:GetCenter();
 	local px, py = GetCursorPosition();
 	local scale = Minimap:GetEffectiveScale();
-	position = math.deg(math.atan2((py / scale) - my, (px / scale) - mx)) % 360;
+	ATM_InterfaceOptions.minimapButtonPosition = math.deg(math.atan2((py / scale) - my, (px / scale) - mx)) % 360;
 	self:Raise();
 	self:update();
 end
@@ -86,5 +88,3 @@ button:SetScript("OnClick", function()
 	AppearanceModelFrame_LoadWithFilter();
 end);
 button:SetScript("OnEvent", button.update);
-button:update();
-button:Show();

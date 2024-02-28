@@ -21,6 +21,11 @@
         "GameTooltip_Hide",
         "RED_FONT_COLOR",
         "GameTooltip_AddErrorLine",
-        "InterfaceOptions_AddCategory"
+        "InterfaceOptions_AddCategory",
+        "MODELFRAME_UI_CAMERA_POSITION",
+        "MODELFRAME_UI_CAMERA_TARGET",
+        "enabled",
+        "Model_ApplyUICamera",
+        "InterfaceOptionsFrame_OpenToCategory"
     ]
 }

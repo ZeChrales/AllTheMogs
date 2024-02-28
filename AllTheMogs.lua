@@ -47,12 +47,21 @@ ClassicTransmogFrame:SetBackdrop({
 -- close
 ClassicTransmogFrame.CloseButton = CreateFrame("Button", nil, ClassicTransmogFrame, "UIPanelCloseButton");
 ClassicTransmogFrame.CloseButton:SetPoint("TOPRIGHT", ClassicTransmogFrame, "TOPRIGHT", -1, -1);
+-- settings
+ClassicTransmogFrame.SettingsButton = CreateFrame("Button", nil, ClassicTransmogFrame, "UIPanelButtonTemplate");
+ClassicTransmogFrame.SettingsButton:SetSize(24, 24);
+ClassicTransmogFrame.SettingsButton:SetPoint("RIGHT", ClassicTransmogFrame.CloseButton, "LEFT", -5, 0);
+ClassicTransmogFrame.SettingsButton:SetNormalTexture("Interface\\QuestFrame\\WorldQuest");
+ClassicTransmogFrame.SettingsButton:SetNormalAtlas("worldquest-icon-engineering");
+ClassicTransmogFrame.SettingsButton:HookScript("OnClick", function()
+	InterfaceOptionsFrame_OpenToCategory(appName);
+end)
 
 ClassicTransmogFrame:Hide();
 
 -- content
 local ContentFrame = CreateFrame("Frame", nil, ClassicTransmogFrame)
-ContentFrame:SetSize(500, 440)
+ContentFrame:SetSize(500, 470)
 ContentFrame:SetPoint("LEFT")
 
 -- bottom
@@ -132,9 +141,12 @@ frame:SetScript("OnEvent", function()
 	itemCache:SetScript("OnEvent", itemCache.OnEvent);
 
 	-- init interface options
-	local interfaceOptions = CreateFrame("Frame");
-	Mixin(interfaceOptions, InterfaceOptionsMixin);
-	interfaceOptions:OnLoad();
+	app.interfaceOptions = CreateFrame("Frame");
+	Mixin(app.interfaceOptions, InterfaceOptionsMixin);
+	app.interfaceOptions:OnLoad();
+	
+	app.minimapButton:update();
+	app.minimapButton:Show();
 end)
 
 
