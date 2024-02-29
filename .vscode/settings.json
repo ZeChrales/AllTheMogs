@@ -26,6 +26,7 @@
         "MODELFRAME_UI_CAMERA_TARGET",
         "enabled",
         "Model_ApplyUICamera",
-        "InterfaceOptionsFrame_OpenToCategory"
+        "InterfaceOptionsFrame_OpenToCategory",
+        "SlashCmdList"
     ]
 }
