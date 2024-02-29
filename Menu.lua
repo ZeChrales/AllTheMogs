@@ -113,6 +113,8 @@ offhandType = {
 	[2] = { type = 0, name = "Held In Off-hand" },
 };
 
+local MenuButtons = {};
+
 -- build Menu Buttons
 function CreateMenu(parentFrame)
 	local lastButton;
@@ -125,6 +127,7 @@ function CreateMenu(parentFrame)
 			xOffset = value;
 		else
 			local menuButton = CreateFrame("Button", "MenuButton" .. i, parentFrame);
+			MenuButtons[i] = menuButton;
 			if lastButton then
 				menuButton:SetPoint("LEFT", lastButton, "RIGHT", xOffset, 0);
 			else
@@ -132,35 +135,24 @@ function CreateMenu(parentFrame)
 			end
 			lastButton = menuButton;
 			xOffset = spacingNoSmallButton;
-			menuButton:SetSize(31, 31)
-			menuButton.icon = menuButton:CreateTexture(nil, "ARTWORK")
-			menuButton.icon:SetPoint("CENTER")
-			menuButton.icon:SetSize(31, 31)
-			menuButton.icon:SetTexture("Interface\\Transmogrify\\Transmogrify")
-			menuButton.icon:SetAtlas("transmog-nav-slot-" .. slots[i])
-			menuButton.highlight = menuButton:CreateTexture(nil, "ARTWORK")
-			menuButton.highlight:SetPoint("CENTER")
-			menuButton.highlight:SetSize(31, 31)
-			menuButton.highlight:SetTexture("Interface\\Transmogrify\\Transmogrify")
-			menuButton.highlight:SetAtlas("bags-roundhighlight")
-			menuButton.highlight:Hide()
 
-			menuButton:HookScript("OnEnter", function()
-				if filterSlot ~= i then
-					--highlight
-					menuButton.highlight:Show()
-				end
-			end)
-			menuButton:HookScript("OnLeave", function()
-				if filterSlot ~= i then
-					--highlight
-					menuButton.highlight:Hide()
-				end
-			end)
+			menuButton:SetSize(31, 31)
+			menuButton:SetNormalTexture("Interface\\Transmogrify\\Transmogrify");
+			menuButton:SetNormalAtlas("transmog-nav-slot-" .. slots[i]);
+			menuButton:SetHighlightTexture("Interface\\Transmogrify\\Transmogrify");
+			menuButton:SetHighlightAtlas("bags-roundhighlight");
+			menuButton.selected = menuButton:CreateTexture(nil, "OVERLAY");
+			menuButton.selected:SetPoint("CENTER");
+			menuButton.selected:SetTexture("Interface\\Transmogrify\\Transmogrify");
+			menuButton.selected:SetAtlas("transmog-nav-slot-selected", true);
+			menuButton.selected:Hide();
 
 			menuButton:HookScript("OnClick", function()
 				if filterSlot ~= i then
-					--refresh
+					-- select
+					MenuButtons[filterSlot].selected:Hide();
+					MenuButtons[i].selected:Show();
+					-- refresh
 					filterSlot = i;
 					currentPage = 1;
 
