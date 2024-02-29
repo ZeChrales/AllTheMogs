@@ -88,3 +88,10 @@ button:SetScript("OnClick", function()
 	AppearanceModelFrame_LoadWithFilter();
 end);
 button:SetScript("OnEvent", button.update);
+
+SLASH_ALLTHEMOGS1 = "/atm"
+SlashCmdList["ALLTHEMOGS"] = function(msg, editBox)
+	InitDatabase();
+	ClassicTransmogFrame:Show();
+	AppearanceModelFrame_LoadWithFilter();
+end
