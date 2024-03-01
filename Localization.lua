@@ -556,10 +556,68 @@ app.CLASSES_CAMERAS = {
 	[7] = { app.CAMERA_GNOME_MALE, app.CAMERA_GNOME_FEMALE },
 	-- troll
 	[8] = { app.CAMERA_TROLL_MALE, app.CAMERA_TROLL_FEMALE },
+	-- goblin
+	[9] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
 	-- bloodelf
 	[10] = { app.CAMERA_BLOODELF_MALE, app.CAMERA_BLOODELF_FEMALE },
 	-- draenei
 	[11] = { app.CAMERA_DRAENEI_MALE, app.CAMERA_DRAENEI_FEMALE },
+	-- felorc
+	[12] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- naga
+	[13] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- broken
+	[14] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- skeleton
+	[15] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- vrykul
+	[16] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- tuskarr
+	[17] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- foresttroll
+	[18] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- taunka
+	[19] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- northrendskeleton
+	[20] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- icetroll
+	[21] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- worgen
+	[22] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- gilnean
+	[23] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- pandaren neutral
+	[24] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- pandaren alliance
+	[25] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- pandaren horde
+	[26] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- nightborne
+	[27] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- highmountaintauren
+	[28] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- voidelf
+	[29] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- lightforgeddraenei
+	[30] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- zandalaritroll
+	[31] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- kultiran
+	[32] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- thinhuman
+	[33] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- darkirondwarf
+	[34] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- vulpera
+	[35] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- magharorc
+	[36] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- mechagnome
+	[37] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- dracthyr alliance
+	[52] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
+	-- dracthyr horde
+	[70] = { app.CAMERA_HUMAN_MALE, app.CAMERA_HUMAN_FEMALE }, --todo
 };
 
 app.WEAPONS_CAMERAS = {
