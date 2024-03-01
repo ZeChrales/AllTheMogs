@@ -318,26 +318,28 @@ function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 	local count = 1;
 
 	local listAppearances = app.AppearancesByTypes[type][subclass];
-	for i = 1, #listAppearances do
-		local found = false;
-		local appearanceId = listAppearances[i];
+	if listAppearances then
+		for i = 1, #listAppearances do
+			local found = false;
+			local appearanceId = listAppearances[i];
 
-		if app.ItemsByAppearances[appearanceId] then
-			local listItems = app.ItemsByAppearances[appearanceId].i;
+			if app.ItemsByAppearances[appearanceId] then
+				local listItems = app.ItemsByAppearances[appearanceId].i;
 
-			for j = 1, #listItems do
-				local item = app.Items[listItems[j]];
-				if app.filterGrey and (item.q == 0 or item.q == 1) then
-					-- filter grey
-				else
-					found = true;
+				for j = 1, #listItems do
+					local item = app.Items[listItems[j]];
+					if app.filterGrey and (item.q == 0 or item.q == 1) then
+						-- filter grey
+					else
+						found = true;
+					end
 				end
 			end
-		end
 
-		if found then
-			list[count] = listAppearances[i];
-			count = count + 1;
+			if found then
+				list[count] = listAppearances[i];
+				count = count + 1;
+			end
 		end
 	end
 
