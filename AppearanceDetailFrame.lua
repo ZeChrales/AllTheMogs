@@ -48,6 +48,11 @@ function AppearanceDetailFrame_Load(appearanceId)
 
 			local text = GetItemText(itemId, filterSlot, parentSubclass);
 			item.text:SetText(text);
+			local check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\unknown" .. ":0\124t";
+			if app.Items[itemId].collected or ATM_ItemCache[itemId] then
+				check = "\124T" .. "Interface\\AddOns\\AllTheThings\\assets\\known_circle" .. ":0\124t";
+			end
+			item.collected:SetText(check);
 			item:Show();
 
 			count = count + 1;
@@ -69,6 +74,9 @@ function AppearanceDetailItem_Get(num)
 		item.text = item:CreateFontString(nil, "OVERLAY", "GameTooltipText");
 		item.text:SetPoint("CENTER");
 		item.text:SetText("AppearanceDetailFrame_itemId" .. num);
+
+		item.collected = item:CreateFontString(nil, "OVERLAY", "GameTooltipText");
+		item.collected:SetPoint("RIGHT");
 
 		item:SetHyperlinksEnabled(true)
 		item:SetScript("OnHyperlinkClick", ChatFrame_OnHyperlinkShow)
