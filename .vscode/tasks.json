@@ -6,17 +6,17 @@
         {
             "label": "build era",
             "type": "shell",
-            "command": "cp -r -Force . 'C:\\World of Warcraft\\_classic_era_\\Interface\\AddOns'"
+            "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_classic_era_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
         {
             "label": "build wotlk",
             "type": "shell",
-            "command": "cp -r -Force . 'C:\\World of Warcraft\\_classic_\\Interface\\AddOns'"
+            "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_classic_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
         {
             "label": "build retail",
             "type": "shell",
-            "command": "cp -r -Force . 'C:\\World of Warcraft\\_retail_\\Interface\\AddOns'"
+            "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_retail_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
         {
             "label": "build",
