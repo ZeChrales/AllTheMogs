@@ -77,18 +77,19 @@ function AppearanceModelFrame_Init(parentFrame)
 		ModelFrame.boe:SetPoint("TOP", ModelFrame, "TOP", 0, 0);
 		ModelFrame.boe:SetSize(24, 24);
 		ModelFrame.boe:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		ModelFrame.boe:SetAtlas("Banker");
+		ModelFrame.boe:SetAtlas("Auctioneer");
 
 		-- pvp
 		ModelFrame.pvp = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.pvp:SetPoint("TOPRIGHT", ModelFrame, "TOPRIGHT", 0, 0);
 		ModelFrame.pvp:SetSize(28, 28);
 		ModelFrame.pvp:SetTexture("Interface\\Minimap\\objecticonsatlas");
-		if UnitFactionGroup("player") == "Horde" then
-			ModelFrame.pvp:SetAtlas("poi-horde");
-		else
-			ModelFrame.pvp:SetAtlas("poi-alliance");
-		end
+		ModelFrame.pvp:SetAtlas("CrossedFlags");
+		-- if UnitFactionGroup("player") == "Horde" then
+		-- 	ModelFrame.pvp:SetAtlas("poi-horde");
+		-- else
+		-- 	ModelFrame.pvp:SetAtlas("poi-alliance");
+		-- end
 
 		-- quest
 		ModelFrame.quest = ModelFrame:CreateTexture(nil, "OVERLAY");
