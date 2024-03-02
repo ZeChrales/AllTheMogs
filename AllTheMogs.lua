@@ -60,9 +60,18 @@ end)
 ClassicTransmogFrame:Hide();
 
 -- content
-local ContentFrame = CreateFrame("Frame", nil, ClassicTransmogFrame)
-ContentFrame:SetSize(500, 470)
-ContentFrame:SetPoint("LEFT")
+local ContentFrame = CreateFrame("Frame", nil, ClassicTransmogFrame);
+ContentFrame:SetSize(500, 470);
+ContentFrame:SetPoint("LEFT");
+ContentFrame:HookScript("OnMouseWheel", function(self, delta)
+	if (delta == -1 and currentPage < maxPage) then
+		currentPage = currentPage + 1;
+		AppearanceModelFrame_LoadWithFilter();
+	elseif (delta == 1 and currentPage > 1) then
+		currentPage = currentPage - 1;
+		AppearanceModelFrame_LoadWithFilter();
+	end
+end);
 
 -- bottom
 
