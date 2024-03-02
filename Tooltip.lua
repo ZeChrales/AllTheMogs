@@ -64,4 +64,5 @@ end
 -- hook tooltip only on classic
 if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE then
 	GameTooltip:HookScript("OnTooltipSetItem", ShowAppearances);
+	ItemRefTooltip:HookScript("OnTooltipSetItem", ShowAppearances);
 end
