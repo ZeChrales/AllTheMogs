@@ -15,13 +15,13 @@ end
 -- init
 function InterfaceOptionsMixin:OnLoad()
     -- Interface Options for addon
-    self.name = "AllTheMogs";
+    self.name = appName;
     InterfaceOptions_AddCategory(self);
 
     -- add widgets to the panel as desired
     local title = self:CreateFontString("ARTWORK", nil, "GameFontNormalLarge");
     title:SetPoint("TOP");
-    title:SetText("AllTheMogs");
+    title:SetText(appName);
 
     -- grey/white filter
     app.filterGrey = ATM_InterfaceOptions.filterGrey;
@@ -29,7 +29,7 @@ function InterfaceOptionsMixin:OnLoad()
     -- checkbox
     local checkbox = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate");
     checkbox:SetPoint("TOPLEFT", 20, -20);
-    checkbox.Text:SetText("Filter grey & white items");
+    checkbox.Text:SetText("Filter grey & white items (disabled for Retail)");
     checkbox:HookScript("OnClick", function(_, btn, down)
         app.filterGrey = checkbox:GetChecked();
         ATM_InterfaceOptions.filterGrey = app.filterGrey;

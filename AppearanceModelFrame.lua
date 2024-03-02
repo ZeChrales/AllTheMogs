@@ -65,25 +65,6 @@ function AppearanceModelFrame_Init(parentFrame)
 		ModelFrame.selected:SetAtlas("transmog-wardrobe-border-current", true);
 		ModelFrame.selected:SetBlendMode("ADD");
 
-		-- to debug, ModelWithControlsTemplate + EnableMouse
-		--ModelFrame.modelFrame = CreateFrame("DressUpModel", nil, ModelFrame, "ModelTemplate");
-		--ModelFrame.modelFrame:SetSize(85, 85);
-		--ModelFrame.modelFrame:SetSize(85, 100);
-		--ModelFrame.modelFrame:SetPoint("CENTER");
-		--ModelFrame.modelFrame:EnableMouse(false);
-		--ModelFrame.modelFrame:SetModel("Item/ObjectComponents/Head/Helm_Goggles_Xray_A_01_BeF.m2");
-		--ModelFrame.modelFrame:SetPortraitZoom(0.8);
-		--ModelFrame.modelFrame:SetRotation(0.2);
-		--ModelFrame.modelFrame:FreezeAnimation(60, 0, 55);
-		--ModelFrame.modelFrame:SetUnit("player", false);
-		--ModelFrame.modelFrame:Undress();
-		--ModelFrame.modelFrame:SetDoBlend(false);
-		--ModelFrame.modelFrame:SetKeepModelOnHide(true);
-		--ModelFrame.modelFrame:MakeCurrentCameraCustom();
-		--ModelFrame.modelFrame:SetSheathed(false);
-		--ModelFrame.modelFrame:TryOn("item:"..38276);
-		--ModelFrame.modelFrame:SetUseTransmogSkin(true);
-
 		-- rwp
 		ModelFrame.rwp = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.rwp:SetPoint("TOPLEFT", ModelFrame, "TOPLEFT", 0, 0);
@@ -156,13 +137,6 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	ModelFrame:SetDoBlend(false);
 	ModelFrame:SetKeepModelOnHide(true);
 
-	-- change zoom/position depending on slot
-	--ModelFrame.modelFrame:SetPortraitZoom(0.8);
-	--ModelFrame.modelFrame:SetRotation(CAM_POS[filterSlot].Rotation);
-	--ModelFrame.modelFrame:SetPosition(CAM_POS[filterSlot].Position[1], CAM_POS[filterSlot].Position[2],
-	--	CAM_POS[filterSlot].Position[3]);
-	--	ModelFrame.modelFrame:SetPortraitZoom(CAM_POS[filterSlot].Zoom);
-
 	local camera = app.WEAPONS_CAMERAS[13];
 	if filterSlot < 13 then
 		camera = app.CLASSES_CAMERAS[race][gender][filterSlot];
@@ -193,8 +167,6 @@ function AppearanceModelFrame_Load(frameId, appearanceId)
 	else
 		ModelFrame:SetAnimation(0, 0);
 	end
-
-	--ModelFrame.modelFrame:Undress();
 
 	-- get first item of an appearance
 	local itemId = app.ItemsByAppearances[appearanceId].i[1];
@@ -324,14 +296,23 @@ function AppearanceModelFrame_GetListOfAppearances(type, subclass)
 			local appearanceId = listAppearances[i];
 
 			if app.ItemsByAppearances[appearanceId] then
-				local listItems = app.ItemsByAppearances[appearanceId].i;
+				local appearance = app.ItemsByAppearances[appearanceId];
+				if (not app.filterRWP and appearance.rwp)
+					or (not app.filterBOE and appearance.boe)
+					or (not app.filterPVP and appearance.pvp)
+					or (not app.filterQuest and appearance.sourceQuest)
+					or (not app.filterCraft and appearance.sourceCraft)
+					or (not app.filterDrop and appearance.sourceDrop)
+					or (not appearance.rwp and not appearance.boe and not appearance.pvp and not appearance.sourceQuest and not appearance.sourceCraft and not appearance.sourceDrop) then
+					local listItems = appearance.i;
 
-				for j = 1, #listItems do
-					local item = app.Items[listItems[j]];
-					if app.filterGrey and (item.q == 0 or item.q == 1) then
-						-- filter grey
-					else
-						found = true;
+					for j = 1, #listItems do
+						local item = app.Items[listItems[j]];
+						if app.filterGrey and (item.q == 0 or item.q == 1) then
+							-- filter grey
+						else
+							found = true;
+						end
 					end
 				end
 			end

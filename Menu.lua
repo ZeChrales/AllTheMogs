@@ -155,25 +155,7 @@ function CreateMenu(parentFrame)
 					-- refresh
 					filterSlot = i;
 					currentPage = 1;
-
-					local type = filters[i]["Type"];
-					local subclass = 1;
-					-- for shirt or tabard or back
-					if filterSlot == 3 or filterSlot == 5 or filterSlot == 6 then
-						subclass = filters[i]["Subclasses"][1];
-						-- armor
-					elseif filterSlot >= 1 and filterSlot <= 12 then
-						subclass = filters[i]["Subclasses"][filterArmorType];
-						-- weapon
-					elseif filterSlot == 14 then
-						type = filters[i][1]["Type"];
-						subclass = filters[i][1]["Subclasses"][filterWeaponType];
-						-- offhand
-					elseif filterSlot == 16 then
-						type = filters[i][1]["Type"];
-						subclass = filters[i][1]["Subclasses"][filterOffhandType];
-					end
-					AppearanceModelFrame_LoadWithFilter(type, subclass, currentPage);
+					AppearanceModelFrame_LoadWithFilter();
 
 					-- display associated dropdown
 					dropDownArmorType:Hide();
@@ -194,6 +176,8 @@ function CreateMenu(parentFrame)
 		end
 	end
 
+	MenuButtons[1].selected:Show();
+
 	dropDownArmorType = LibDD:Create_UIDropDownMenu("DromDownArmorType", parentFrame);
 	dropDownArmorType:SetPoint("LEFT", lastButton, "RIGHT", 5, 0);
 	LibDD:UIDropDownMenu_SetWidth(dropDownArmorType, 75);
@@ -207,7 +191,7 @@ function CreateMenu(parentFrame)
 				filterArmorType = self.value;
 				currentPage = 1;
 				LibDD:UIDropDownMenu_SetSelectedValue(dropDownArmorType, filterArmorType);
-				AppearanceModelFrame_LoadWithFilter(1);
+				AppearanceModelFrame_LoadWithFilter();
 			end
 			LibDD:UIDropDownMenu_AddButton(info);
 		end

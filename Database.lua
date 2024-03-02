@@ -1,17 +1,19 @@
 local appName, app = ...;
 -- database
 
-databaseLoaded = false;
+app.databaseLoaded = false;
 
+-- for each item in the database, get info from ATT and update item + appearance
 function InitDatabase()
 	-- AllTheThings is optional
-	if databaseLoaded or ATTC == nil then
+	if app.databaseLoaded or ATTC == nil then
 		return;
 	end
 
 	-- improve items database from ATT
 	for itemId, item in pairs(app.Items) do
 		local attItem = ATTC.SearchForField("itemID", itemId);
+		local appearance = app.ItemsByAppearances[item.a];
 
 		local sourceQuest;
 		local sourceCraft;
@@ -19,55 +21,65 @@ function InitDatabase()
 
 		for k, v in pairs(attItem) do
 			-- boe
-			if v.b and v.b ~= 1 then
-				app.Items[itemId].boe = 1;
+			if not v.b or v.b ~= 1 then
+				item.boe = 1;
+				appearance.boe = 1;
 			end
 
 			-- rwp
-			if v.rwp and isRWP(v.rwp) then
-				app.Items[itemId].rwp = 1;
+			if v.rwp and IsRWP(v.rwp) then
+				item.rwp = 1;
+				appearance.rwp = 1;
 			end
 
 			-- pvp
 			if v.pvp then
-				app.Items[itemId].pvp = 1;
+				item.pvp = 1;
+				appearance.pvp = 1;
 			end
 
 			-- item is directly collectible/collected
 			if v.collectible and v.collected then
-				app.Items[itemId].collected = 1;
+				item.collected = 1;
+				appearance.collected = 1;
 			end
 
 			-- quest
 			if v.parent and v.parent.questID then
-				app.Items[itemId].sourceQuest = 1;
+				item.sourceQuest = 1;
+				appearance.sourceQuest = 1;
+
 				local quest = v.parent;
 				if quest.collected then
-					app.Items[itemId].collected = 1;
+					item.collected = 1;
+					appearance.collected = 1;
 				end
 				if quest.total and quest.progress == quest.total then
-					app.Items[itemId].collected = 1;
+					item.collected = 1;
+					appearance.collected = 1;
 				end
 				-- craft
 			elseif v.parent and v.parent.parent and (v.parent.parent.professionID
 					or (v.parent.parent.parent and v.parent.parent.parent.professionID)) then
-				app.Items[itemId].sourceCraft = 1;
+				item.sourceCraft = 1;
+				appearance.sourceCraft = 1;
 				-- loot from npc
 			elseif v.parent and (v.parent.npcID
 					or (v.parent.parent and (v.parent.parent.npcID
 						-- loot from instance zone
 						or (v.parent.parent.parent and v.parent.parent.parent.instanceID)))) then
-				app.Items[itemId].sourceDrop = 1;
+				item.sourceDrop = 1;
+				appearance.sourceDrop = 1;
 			end
 		end
 	end
 
 	-- database loaded
-	databaseLoaded = true;
+	app.databaseLoaded = true;
 end
 
 -- check version RWP
-function isRWP(version)
+function IsRWP(version)
 	local isRWP = false;
 
 	local major = string.sub(version, 1, 1);
