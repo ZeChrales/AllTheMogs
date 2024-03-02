@@ -113,122 +113,67 @@ pageText:SetPoint("RIGHT", pagePrevious, "LEFT", -5, 0);
 pageText:SetText(currentPage .. "/x");
 
 -- source filters
+function CreateFilter(texture, parent, leftFrame, tooltip, func)
+	local filterFrame = CreateFrame("Button", nil, parent);
+	if leftFrame then
+		filterFrame:SetPoint("LEFT", leftFrame, "RIGHT", 5, 0);
+	else
+		filterFrame:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 5, -5);
+	end
+	filterFrame:SetSize(28, 28);
+	filterFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
+	filterFrame:SetNormalAtlas(texture);
+	filterFrame.checkButton = CreateFrame("CheckButton", nil, filterFrame);
+	filterFrame.checkButton:SetPoint("BOTTOMRIGHT", filterFrame, "BOTTOMRIGHT");
+	filterFrame.checkButton:SetSize(15, 14);
+	filterFrame.checkButton:SetNormalAtlas("checkbox-minimal");
+	filterFrame.checkButton:SetCheckedTexture("checkmark-minimal");
+	filterFrame.checkButton:SetChecked(true);
+	filterFrame.checkButton:HookScript("OnClick", func);
+	filterFrame:HookScript("OnClick", function()
+		filterFrame.checkButton:Click();
+	end);
+	filterFrame:HookScript("OnEnter", function()
+		GameTooltip:SetOwner(filterFrame, "ANCHOR_RIGHT");
+		GameTooltip:SetText(tooltip);
+		GameTooltip:Show();
+	end);
+	filterFrame:HookScript("OnLeave", function()
+		GameTooltip:Hide();
+	end);
 
-local completedFrame = CreateFrame("CheckButton", nil, ContentFrame);
---completedFrame:SetNormalTexture();
+	return filterFrame;
+end
 
-local rwpFrame = CreateFrame("Button", nil, ContentFrame);
-rwpFrame:SetPoint("BOTTOMLEFT", ContentFrame, "BOTTOMLEFT", 5, -5);
-rwpFrame:SetSize(28, 28);
-rwpFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-rwpFrame:SetNormalAtlas("XMarksTheSpot");
-rwpFrame.checkButton = CreateFrame("CheckButton", nil, rwpFrame);
-rwpFrame.checkButton:SetPoint("BOTTOMRIGHT", rwpFrame, "BOTTOMRIGHT");
-rwpFrame.checkButton:SetSize(15, 14);
-rwpFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-rwpFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-rwpFrame.checkButton:SetChecked(true);
-rwpFrame.checkButton:HookScript("OnClick", function()
-	app.filterRWP = not rwpFrame.checkButton:GetChecked();
+-- rwp
+local rwpFrame = CreateFilter("XMarksTheSpot", ContentFrame, nil, "Items removed in Cataclysm (RWP)", function(self)
+	app.filterRWP = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
 end);
-rwpFrame:HookScript("OnClick", function()
-	rwpFrame.checkButton:Click();
-end);
-
-local boeFrame = CreateFrame("Button", nil, ContentFrame);
-boeFrame:SetPoint("LEFT", rwpFrame, "RIGHT", 5, 0);
-boeFrame:SetSize(28, 28);
-boeFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-boeFrame:SetNormalAtlas("Auctioneer");
-boeFrame.checkButton = CreateFrame("CheckButton", nil, boeFrame);
-boeFrame.checkButton:SetPoint("BOTTOMRIGHT", boeFrame, "BOTTOMRIGHT");
-boeFrame.checkButton:SetSize(15, 14);
-boeFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-boeFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-boeFrame.checkButton:SetChecked(true);
-boeFrame.checkButton:HookScript("OnClick", function()
-	app.filterBOE = not boeFrame.checkButton:GetChecked();
+-- boe
+local boeFrame = CreateFilter("Auctioneer", ContentFrame, rwpFrame, "Bind on Equip Items (B)", function(self)
+	app.filterBOE = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
 end);
-boeFrame:HookScript("OnClick", function()
-	boeFrame.checkButton:Click();
-end);
-
-local pvpFrame = CreateFrame("Button", nil, ContentFrame);
-pvpFrame:SetPoint("LEFT", boeFrame, "RIGHT", 5, 0);
-pvpFrame:SetSize(28, 28);
-pvpFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-pvpFrame:SetNormalAtlas("CrossedFlags");
-pvpFrame.checkButton = CreateFrame("CheckButton", nil, pvpFrame);
-pvpFrame.checkButton:SetPoint("BOTTOMRIGHT", pvpFrame, "BOTTOMRIGHT");
-pvpFrame.checkButton:SetSize(15, 14);
-pvpFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-pvpFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-pvpFrame.checkButton:SetChecked(true);
-pvpFrame.checkButton:HookScript("OnClick", function()
-	app.filterPVP = not pvpFrame.checkButton:GetChecked();
+-- pvp
+local pvpFrame = CreateFilter("CrossedFlags", ContentFrame, boeFrame, "PvP Items (PvP)", function(self)
+	app.filterPVP = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
 end);
-pvpFrame:HookScript("OnClick", function()
-	pvpFrame.checkButton:Click();
-end);
-
-local questFrame = CreateFrame("Button", nil, ContentFrame);
-questFrame:SetPoint("LEFT", pvpFrame, "RIGHT", 5, 0);
-questFrame:SetSize(28, 28);
-questFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-questFrame:SetNormalAtlas("QuestNormal");
-questFrame.checkButton = CreateFrame("CheckButton", nil, questFrame);
-questFrame.checkButton:SetPoint("BOTTOMRIGHT", questFrame, "BOTTOMRIGHT");
-questFrame.checkButton:SetSize(15, 14);
-questFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-questFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-questFrame.checkButton:SetChecked(true);
-questFrame.checkButton:HookScript("OnClick", function()
-	app.filterQuest = not questFrame.checkButton:GetChecked();
+-- quest
+local questFrame = CreateFilter("QuestNormal", ContentFrame, pvpFrame, "Quest rewards Items (Q)", function(self)
+	app.filterQuest = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
 end);
-questFrame:HookScript("OnClick", function()
-	questFrame.checkButton:Click();
-end);
-
-local craftFrame = CreateFrame("Button", nil, ContentFrame);
-craftFrame:SetPoint("LEFT", questFrame, "RIGHT", 5, 0);
-craftFrame:SetSize(28, 28);
-craftFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-craftFrame:SetNormalAtlas("Profession");
-craftFrame.checkButton = CreateFrame("CheckButton", nil, craftFrame);
-craftFrame.checkButton:SetPoint("BOTTOMRIGHT", craftFrame, "BOTTOMRIGHT");
-craftFrame.checkButton:SetSize(15, 14);
-craftFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-craftFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-craftFrame.checkButton:SetChecked(true);
-craftFrame.checkButton:HookScript("OnClick", function()
-	app.filterCraft = not craftFrame.checkButton:GetChecked();
+-- quest
+local craftFrame = CreateFilter("Profession", ContentFrame, questFrame, "Crafted Items (C)", function(self)
+	app.filterCraft = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
 end);
-craftFrame:HookScript("OnClick", function()
-	craftFrame.checkButton:Click();
-end);
-
-local dropFrame = CreateFrame("Button", nil, ContentFrame);
-dropFrame:SetPoint("LEFT", craftFrame, "RIGHT", 5, 0);
-dropFrame:SetSize(28, 28);
-dropFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
-dropFrame:SetNormalAtlas("DungeonSkull");
-dropFrame.checkButton = CreateFrame("CheckButton", nil, dropFrame);
-dropFrame.checkButton:SetPoint("BOTTOMRIGHT", dropFrame, "BOTTOMRIGHT");
-dropFrame.checkButton:SetSize(15, 14);
-dropFrame.checkButton:SetNormalAtlas("checkbox-minimal");
-dropFrame.checkButton:SetCheckedTexture("checkmark-minimal");
-dropFrame.checkButton:SetChecked(true);
-dropFrame.checkButton:HookScript("OnClick", function()
-	app.filterDrop = not dropFrame.checkButton:GetChecked();
+-- quest
+local dropFrame = CreateFilter("DungeonSkull", ContentFrame, craftFrame, "Dropped Items (D)", function(self)
+	app.filterDrop = not self:GetChecked();
 	AppearanceModelFrame_LoadWithFilter();
-end);
-dropFrame:HookScript("OnClick", function()
-	dropFrame.checkButton:Click();
 end);
 
 -- details
