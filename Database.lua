@@ -54,7 +54,7 @@ function InitDatabase()
 					item.collected = 1;
 					appearance.collected = 1;
 				end
-				if quest.total and quest.progress == quest.total then
+				if quest.total and quest.total ~= 0 and quest.progress == quest.total then
 					item.collected = 1;
 					appearance.collected = 1;
 				end
