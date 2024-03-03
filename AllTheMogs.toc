@@ -6,7 +6,7 @@
 ## Author: Chrales
 ## X-Curse-Project-ID: 978634
 ## OptionalDeps: AllTheThings, LibStub, LibUIDropDownMenu
-## SavedVariables: ATM_InterfaceOptions, ATM_ItemCache, ATM_CharacterInventory
+## SavedVariables: ATM_InterfaceOptions, ATM_ItemCache, ATM_CharacterInventory, ATM_GuildBankInventory
 
 embeds.xml
 
