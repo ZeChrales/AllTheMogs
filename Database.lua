@@ -108,15 +108,17 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 	end
 
 	-- try to get item from cache for translated item name
-	if C_Item.IsItemDataCachedByID(itemId) then
-		local name = GetItemInfo(itemId);
-		item.n = name;
-	else
-		-- if not in cache, request and replace name when callback is called
-		local itemMixin = Item:CreateFromItemID(itemId);
-		itemMixin:ContinueOnItemLoad(function()
-			app.Items[itemMixin:GetItemID()].n = itemMixin:GetItemName();
-		end);
+	if GetLocale() ~= "enUS" then
+		if C_Item.IsItemDataCachedByID(itemId) then
+			local name = GetItemInfo(itemId);
+			item.n = name;
+		else
+			-- if not in cache, request and replace name when callback is called
+			local itemMixin = Item:CreateFromItemID(itemId);
+			itemMixin:ContinueOnItemLoad(function()
+				app.Items[itemMixin:GetItemID()].n = itemMixin:GetItemName();
+			end);
+		end
 	end
 
 	-- itemlink
