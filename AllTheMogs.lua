@@ -148,31 +148,37 @@ end
 -- rwp
 local rwpFrame = CreateFilter("XMarksTheSpot", ContentFrame, nil, "Items removed in Cataclysm (RWP)", function(self)
 	app.filterRWP = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 -- boe
 local boeFrame = CreateFilter("Auctioneer", ContentFrame, rwpFrame, "Bind on Equip Items (B)", function(self)
 	app.filterBOE = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 -- pvp
 local pvpFrame = CreateFilter("CrossedFlags", ContentFrame, boeFrame, "PvP Items (PvP)", function(self)
 	app.filterPVP = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 -- quest
 local questFrame = CreateFilter("QuestNormal", ContentFrame, pvpFrame, "Quest rewards Items (Q)", function(self)
 	app.filterQuest = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 -- quest
 local craftFrame = CreateFilter("Profession", ContentFrame, questFrame, "Crafted Items (C)", function(self)
 	app.filterCraft = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 -- quest
 local dropFrame = CreateFilter("DungeonSkull", ContentFrame, craftFrame, "Dropped Items (D)", function(self)
 	app.filterDrop = not self:GetChecked();
+	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end);
 
