@@ -107,6 +107,18 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 		subclass = typesToOffhandSubclasses[item.s];
 	end
 
+	-- try to get item from cache for translated item name
+	if C_Item.IsItemDataCachedByID(itemId) then
+		local name = GetItemInfo(itemId);
+		item.n = name;
+	else
+		-- if not in cache, request and replace name when callback is called
+		local itemMixin = Item:CreateFromItemID(itemId);
+		itemMixin:ContinueOnItemLoad(function()
+			app.Items[itemMixin:GetItemID()].n = itemMixin:GetItemName();
+		end);
+	end
+
 	-- itemlink
 	local text = color .. "\124Hitem:" .. itemId .. "::::::::80:::::\124h[" .. item.n .. "]\124h\124r";
 
