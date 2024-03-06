@@ -20,3 +20,10 @@ With AllTheThings (ATT) addon installed, you can also see :
 With ATT installed :
 - Source and Appearance info
 - Completion status
+
+## Thanks
+
+Thanks a lot for all the beta testers in Formidable Achievements Club !
+And of course thanks again to Crieve, for ATT and all his help.
+
+[Donate](https://www.paypal.com/donate/?hosted_button_id=FT56SHUE9NVAS)
