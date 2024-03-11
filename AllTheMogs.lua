@@ -224,9 +224,6 @@ frame:SetScript("OnEvent", function()
 	app.interfaceOptions = CreateFrame("Frame");
 	Mixin(app.interfaceOptions, InterfaceOptionsMixin);
 	app.interfaceOptions:OnLoad();
-
-	app.minimapButton:update();
-	app.minimapButton:Show();
 end)
 
 print("AllTheMogs loaded !")
