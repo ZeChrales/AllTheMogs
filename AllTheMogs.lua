@@ -224,6 +224,8 @@ frame:SetScript("OnEvent", function()
 	app.interfaceOptions = CreateFrame("Frame");
 	Mixin(app.interfaceOptions, InterfaceOptionsMixin);
 	app.interfaceOptions:OnLoad();
-end)
 
-print("AllTheMogs loaded !")
+	InitializeMiniMapButton();
+end);
+
+print("AllTheMogs loaded !");
