@@ -3,19 +3,19 @@ local appName, app = ...;
 -- Interface options
 InterfaceOptionsMixin = {};
 
--- savedvariables
-if ATM_InterfaceOptions == nil then
-    ATM_InterfaceOptions = {};
-    ATM_InterfaceOptions.filterGrey = true;
-    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-        ATM_InterfaceOptions.filterGrey = false;
-    end
-
-    ATM_InterfaceOptions.minimapPos = 193.47782;
-end
-
 -- init
 function InterfaceOptionsMixin:OnLoad()
+    -- savedvariables
+    if ATM_InterfaceOptions == nil then
+        ATM_InterfaceOptions = {};
+        ATM_InterfaceOptions.filterGrey = true;
+        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+            ATM_InterfaceOptions.filterGrey = false;
+        end
+    
+        ATM_InterfaceOptions.minimapPos = 193.47782;
+    end
+    
     -- Interface Options for addon
     self.name = appName;
     InterfaceOptions_AddCategory(self);
