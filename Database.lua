@@ -133,7 +133,7 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 	local text = GetItemLink(itemId, item.q, item.n);
 
 	-- different type/subclass
-	if slot ~= parentSlot or subclass ~= parentSubclass then
+	if subclass ~= nil and (slot ~= parentSlot or subclass ~= parentSubclass) then
 		-- armor
 		if slot >= 1 and slot <= 12 then
 			local type = "Cosmetic";
