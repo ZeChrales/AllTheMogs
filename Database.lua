@@ -90,10 +90,18 @@ function IsRWP(version)
 	return isRWP;
 end
 
+-- build item link : color/id/name
+function GetItemLink(itemId, quality, name)
+	local color = app.COLOR_STRINGS[quality];
+	-- itemlink
+	local link = color .. "\124Hitem:" .. itemId .. "::::::::80:::::\124h[" .. name .. "]\124h\124r";
+
+	return link;
+end
+
 -- build item text : name(hyperlink with color) + bonus from ATT
 function GetItemText(itemId, parentSlot, parentSubclass)
 	local item = app.Items[itemId];
-	local color = app.COLOR_STRINGS[item.q];
 	local slot = typesToSlots[item.t];
 	local subclass;
 	-- armor
@@ -122,7 +130,7 @@ function GetItemText(itemId, parentSlot, parentSubclass)
 	end
 
 	-- itemlink
-	local text = color .. "\124Hitem:" .. itemId .. "::::::::80:::::\124h[" .. item.n .. "]\124h\124r";
+	local text = GetItemLink(itemId, item.q, item.n);
 
 	-- different type/subclass
 	if slot ~= parentSlot or subclass ~= parentSubclass then

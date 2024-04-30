@@ -61,8 +61,8 @@ local function ShowAppearances(tooltip)
 	end
 end
 
--- hook tooltip only on classic
-if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE then
+-- hook tooltip only before cataclysm
+if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and WOW_PROJECT_ID ~= WOW_PROJECT_CATACLYSM_CLASSIC then
 	GameTooltip:HookScript("OnTooltipSetItem", ShowAppearances);
 	ItemRefTooltip:HookScript("OnTooltipSetItem", ShowAppearances);
 end
