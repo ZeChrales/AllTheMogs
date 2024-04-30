@@ -124,6 +124,10 @@
         "CALENDAR_STATUS_SIGNEDUP",
         "CALENDAR_STATUS_NOT_SIGNEDUP",
         "CALENDAR_STATUS_TENTATIVE",
-        "AddonCompartmentFrame"
+        "AddonCompartmentFrame",
+        "GetItemInfoFromHyperlink",
+        "math",
+        "debugprofilestop",
+        "securecallfunction"
     ]
 }
