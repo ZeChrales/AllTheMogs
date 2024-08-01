@@ -18,7 +18,8 @@ function InterfaceOptionsMixin:OnLoad()
     
     -- Interface Options for addon
     self.name = appName;
-    InterfaceOptions_AddCategory(self);
+    local category = Settings.RegisterCanvasLayoutCategory(self, "AllTheMogs");
+    Settings.RegisterAddOnCategory(category);
 
     -- add widgets to the panel as desired
     local title = self:CreateFontString("ARTWORK", nil, "GameFontNormalLarge");
