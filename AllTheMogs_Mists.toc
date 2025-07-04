@@ -1,11 +1,10 @@
-## Interface: 11507
+## Interface: 50500
 ## Title: AllTheMogs
 ## Name: AllTheMogs
 ## Notes: Addon to check all the Transmogrifications available in game
 ## Version: @project-version@
 ## Author: Chrales
 ## X-Curse-Project-ID: 978634
-## Dependencies: Syndicator
 ## OptionalDeps: AllTheThings, LibStub, LibUIDropDownMenu
 ## SavedVariables: ATM_InterfaceOptions, ATM_ItemCache, ATM_CharacterInventory, ATM_GuildBankInventory
 
@@ -13,7 +12,7 @@ embeds.xml
 
 InterfaceOptions.lua
 
-AppearancesData\EraAppearances.lua
+AppearancesData\MopAppearances.lua
 Database.lua
 Inventory.lua
 

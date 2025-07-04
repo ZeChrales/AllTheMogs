@@ -1,4 +1,4 @@
-## Interface: 100205
+## Interface: 110107
 ## Title: AllTheMogs
 ## Name: AllTheMogs
 ## Notes: Addon to check all the Transmogrifications available in game

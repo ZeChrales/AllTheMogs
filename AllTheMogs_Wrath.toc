@@ -5,6 +5,7 @@
 ## Version: @project-version@
 ## Author: Chrales
 ## X-Curse-Project-ID: 978634
+## Dependencies: Syndicator
 ## OptionalDeps: AllTheThings, LibStub, LibUIDropDownMenu
 ## SavedVariables: ATM_InterfaceOptions, ATM_ItemCache, ATM_CharacterInventory, ATM_GuildBankInventory
 
