@@ -7,9 +7,11 @@ function AppearanceDetailFrame_Init(parentFrame)
 	AppearanceDetailFrame = parentFrame;
 
 	AppearanceDetailFrame.text = AppearanceDetailFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
-	AppearanceDetailFrame.text:SetPoint("TOP", AppearanceDetailFrame, "TOP", 0, -10);
-	AppearanceDetailFrame.text:SetSize(320, 20);
-	AppearanceDetailFrame.text:SetText("AppearanceID");
+	AppearanceDetailFrame.text:SetPoint("TOPLEFT", AppearanceDetailFrame, "TOPLEFT", 10, -10);
+	AppearanceDetailFrame.text:SetPoint("RIGHT", AppearanceDetailFrame, "RIGHT", -10, 0);
+	AppearanceDetailFrame.text:SetJustifyH("CENTER");
+	AppearanceDetailFrame.text:SetText("");
+	AppearanceDetailFrame.text:Hide();
 
 	AppearanceDetailFrame.items = {};
 	for i = 1, 10 do
@@ -18,13 +20,27 @@ function AppearanceDetailFrame_Init(parentFrame)
 end
 
 function AppearanceDetailFrame_Load(appearanceId)
-	if not AppearanceDetailFrame then return; end;
-
+	-- show detail panel
+	AppearanceDetailFrame:Show();
+	app.ScrollFrame:Show();
+	scrollOffset = 0; -- reset scroll when loading new appearance
+	AppearanceDetailFrame:SetPoint("TOPLEFT", app.ScrollFrame, "TOPLEFT", 5, -5);
 	AppearanceDetailFrame.text:SetText(appearanceId);
-	AppearanceDetailItem_Reset();
+	AppearanceDetailFrame.text:Show();
 
-	local listItems = app.ItemsByAppearances[appearanceId].i;
+	-- safety check — appearance may not exist in data yet
+	local appearance = app.ItemsByAppearances[appearanceId];
+	if not appearance or not appearance.i then
+		return;
+	end
 
+	-- hide any previously shown items
+	for i = 1, #AppearanceDetailFrame.items do
+		local item = AppearanceDetailFrame.items[i];
+		item:Hide();
+	end
+
+	local listItems = appearance.i;
 	local count = 1;
 	for i = 1, #listItems do
 		local itemId = listItems[i];
@@ -46,6 +62,7 @@ function AppearanceDetailFrame_Load(appearanceId)
 			end
 
 			local item = AppearanceDetailItem_Get(count);
+			
 			item.itemLink = app.COLOR_STRINGS[quality] .. "\124Hitem:" ..
 			itemId .. "::::::::80:::::\124h[" .. name .. "]\124h\124r";
 
@@ -61,6 +78,11 @@ function AppearanceDetailFrame_Load(appearanceId)
 			count = count + 1;
 		end
 	end
+
+	-- update scrollbar visibility
+	if app.SetScrollVisible then
+		app.SetScrollVisible();
+	end
 end
 
 -- get or create a detail
@@ -69,30 +91,49 @@ function AppearanceDetailItem_Get(num)
 	if item == nil then
 		AppearanceDetailFrame.items[num] = CreateFrame("Frame", "ItemDetail" .. num, AppearanceDetailFrame);
 		item = AppearanceDetailFrame.items[num];
-		item:SetPoint("TOP", AppearanceDetailFrame, "TOP", 0, -20 - (num * 36));
-		item:SetPoint("LEFT", AppearanceDetailFrame, "LEFT", 15, 0);
-		item:SetPoint("RIGHT", AppearanceDetailFrame, "RIGHT", -15, 0);
+		if num == 1 then
+			item:SetPoint("TOPLEFT", AppearanceDetailFrame, "TOPLEFT", 10, -10);
+			item:SetPoint("RIGHT", AppearanceDetailFrame, "RIGHT", -10, 0);
+		else
+			item:SetPoint("TOPLEFT", AppearanceDetailFrame.items[num - 1], "BOTTOMLEFT", 0, -8);
+			item:SetPoint("RIGHT", AppearanceDetailFrame.items[num - 1], "BOTTOMRIGHT", 0, -8);
+		end
 		item:SetSize(320, 32);
+		item:EnableMouse(true);
 
 		-- card background
 		item.bg = item:CreateTexture(nil, "BACKGROUND");
 		item.bg:SetAllPoints();
 		item.bg:SetColorTexture(0.1, 0.1, 0.15, 0.6);
 
-		item:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD");
-		item:SetHighlightColorTexture(0.2, 0.2, 0.3, 0.4);
+		-- highlight (always present for hover feedback)
+		item.highlight = item:CreateTexture(nil, "HIGHLIGHT");
+		item.highlight:SetAllPoints();
+		item.highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight");
+		item.highlight:SetBlendMode("ADD");
+		item.highlight:SetColorTexture(0.2, 0.2, 0.3, 0.4);
+		item.highlight:Hide();
 
-		-- hover effects
+		-- hover effects — frame-level tooltip (hyperlinks don't trigger OnEnter)
 		item:SetScript("OnEnter", function(self)
 			self.bg:SetColorTexture(0.15, 0.15, 0.22, 0.8);
+			self.highlight:Show();
+			if self.itemLink then
+				GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+				GameTooltip:SetHyperlink(self.itemLink);
+				GameTooltip:Show();
+			end
 		end);
 		item:SetScript("OnLeave", function(self)
 			self.bg:SetColorTexture(0.1, 0.1, 0.15, 0.6);
+			self.highlight:Hide();
+			GameTooltip:Hide();
 		end);
 
 		item.text = item:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 		item.text:SetPoint("CENTER");
 		item.text:SetText("AppearanceDetailFrame_itemId" .. num);
+		item.text:SetTextColor(1, 1, 1);
 
 		item.collected = item:CreateFontString(nil, "OVERLAY", "GameTooltipText");
 		item.collected:SetPoint("RIGHT");

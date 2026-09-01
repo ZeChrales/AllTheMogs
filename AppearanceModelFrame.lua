@@ -19,14 +19,14 @@ function AppearanceModelFrame_Init(parentFrame)
 			"ModelTemplate");
 		--local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame);
 		if lastFrame == nil then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 14, -25);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -10);
 		elseif column == 1 then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 14, -((line - 1) * 125) - 25);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -((line - 1) * 105) - 10);
 		else
-			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 12, 0);
+			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 6, 0);
 		end
 		lastFrame = ModelFrame;
-		ModelFrame:SetSize(90, 120);
+		ModelFrame:SetSize(85, 110);
 		local lightValues = {
 			omnidirectional = false,
 			point = CreateVector3D(-1, 1, -1),
@@ -43,11 +43,10 @@ function AppearanceModelFrame_Init(parentFrame)
 		ModelFrame.background = ModelFrame:CreateTexture(nil, "BACKGROUND");
 		ModelFrame.background:SetColorTexture(0.08, 0.08, 0.12, 0.85);
 		ModelFrame.background:SetAllPoints();
-
 		-- border
 		ModelFrame.border = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.border:SetPoint("CENTER", 0, -3);
-		ModelFrame.border:SetSize(90, 120);
+		ModelFrame.border:SetSize(85, 110);
 		ModelFrame.border:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.border:SetAtlas("transmog-wardrobe-border-uncollected", true);
 		ModelFrame.border:SetDrawLayer("OVERLAY", -1);
@@ -55,20 +54,34 @@ function AppearanceModelFrame_Init(parentFrame)
 		-- highlight
 		ModelFrame.highlight = ModelFrame:CreateTexture(nil, "HIGHLIGHT");
 		ModelFrame.highlight:SetPoint("CENTER");
-		ModelFrame.highlight:SetSize(90, 120);
+		ModelFrame.highlight:SetSize(85, 110);
 		ModelFrame.highlight:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.highlight:SetAtlas("transmog-wardrobe-border-highlighted", true);
 		ModelFrame.highlight:SetBlendMode("ADD");
-		ModelFrame.highlight:SetColorTexture(0.2, 0.3, 0.5, 0.15);
+		ModelFrame.highlight:SetAlpha(0.3);
 
 		-- selected
 		ModelFrame.selected = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.selected:SetPoint("CENTER");
-		ModelFrame.selected:SetSize(90, 120);
+		ModelFrame.selected:SetSize(85, 110);
 		ModelFrame.selected:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.selected:SetAtlas("transmog-wardrobe-border-current", true);
 		ModelFrame.selected:SetBlendMode("ADD");
 		ModelFrame.selected:SetAlpha(0.9);
+
+		-- hover background
+		ModelFrame.hoverBg = ModelFrame:CreateTexture(nil, "OVERLAY");
+		ModelFrame.hoverBg:SetPoint("CENTER");
+		ModelFrame.hoverBg:SetSize(85, 110);
+		ModelFrame.hoverBg:SetColorTexture(0.2, 0.3, 0.5, 0.15);
+		ModelFrame.hoverBg:Hide();
+
+		ModelFrame:SetScript("OnEnter", function(self)
+			self.hoverBg:Show();
+		end);
+		ModelFrame:SetScript("OnLeave", function(self)
+			self.hoverBg:Hide();
+		end);
 
 		-- rwp
 		ModelFrame.rwp = ModelFrame:CreateTexture(nil, "OVERLAY");

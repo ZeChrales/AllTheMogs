@@ -185,7 +185,7 @@ function CreateMenu(parentFrame)
 
 	MenuButtons[1].selected:Show();
 
-	dropDownArmorType = LibDD:Create_UIDropDownMenu("DromDownArmorType", parentFrame);
+	dropDownArmorType = LibDD:Create_UIDropDownMenu("DropDownArmorType", parentFrame);
 	dropDownArmorType:SetPoint("LEFT", lastButton, "RIGHT", 5, 0);
 	LibDD:UIDropDownMenu_SetWidth(dropDownArmorType, 75);
 	dropDownArmorType.initialize = function(dropDownArmorType)
@@ -206,7 +206,7 @@ function CreateMenu(parentFrame)
 	end
 	dropDownArmorType:HookScript("OnShow", dropDownArmorType.initialize);
 
-	dropDownWeaponType = LibDD:Create_UIDropDownMenu("DromDownWeaponType", parentFrame);
+	dropDownWeaponType = LibDD:Create_UIDropDownMenu("DropDownWeaponType", parentFrame);
 	dropDownWeaponType:SetPoint("LEFT", lastButton, "RIGHT", 5, 0);
 	LibDD:UIDropDownMenu_SetWidth(dropDownWeaponType, 150);
 	dropDownWeaponType.initialize = function(dropDownWeaponType)
@@ -227,7 +227,7 @@ function CreateMenu(parentFrame)
 	dropDownWeaponType:HookScript("OnShow", dropDownWeaponType.initialize);
 	dropDownWeaponType:Hide();
 
-	dropDownOffhandType = LibDD:Create_UIDropDownMenu("DromDownOffhandType", parentFrame);
+	dropDownOffhandType = LibDD:Create_UIDropDownMenu("DropDownOffhandType", parentFrame);
 	dropDownOffhandType:SetPoint("LEFT", lastButton, "RIGHT", 5, 0);
 	LibDD:UIDropDownMenu_SetWidth(dropDownOffhandType, 125);
 	dropDownOffhandType.initialize = function(dropDownOffhandType)

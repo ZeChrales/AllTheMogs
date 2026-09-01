@@ -39,7 +39,7 @@ _G["MyFrame"] = ClassicTransmogFrame;
 tinsert(UISpecialFrames, ClassicTransmogFrame:GetName());
 
 ClassicTransmogFrame:SetPoint("CENTER")
-ClassicTransmogFrame:SetSize(950, 520)
+ClassicTransmogFrame:SetSize(1050, 540)
 ClassicTransmogFrame:EnableMouse(true)
 ClassicTransmogFrame:SetMovable(true)
 --ClassicTransmogFrame:SetClampedToScreen(true);
@@ -64,8 +64,8 @@ ClassicTransmogFrame.CloseButton:SetPoint("TOPRIGHT", ClassicTransmogFrame, "TOP
 ClassicTransmogFrame.SettingsButton = CreateFrame("Button", nil, ClassicTransmogFrame, "UIPanelButtonTemplate");
 ClassicTransmogFrame.SettingsButton:SetSize(24, 24);
 ClassicTransmogFrame.SettingsButton:SetPoint("RIGHT", ClassicTransmogFrame.CloseButton, "LEFT", -5, 0);
-ClassicTransmogFrame.SettingsButton:SetNormalTexture("Interface\\QuestFrame\\WorldQuest");
-ClassicTransmogFrame.SettingsButton:SetNormalAtlas("worldquest-icon-engineering");
+ClassicTransmogFrame.SettingsButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton-Up");
+ClassicTransmogFrame.SettingsButton:SetPushedTexture("Interface\\Buttons\\UI-OptionsButton-Down");
 ClassicTransmogFrame.SettingsButton:HookScript("OnClick", function()
 	InterfaceOptionsFrame_OpenToCategory(appName);
 end)
@@ -73,6 +73,7 @@ end)
 -- title text
 ClassicTransmogFrame.Title = ClassicTransmogFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 ClassicTransmogFrame.Title:SetPoint("LEFT", ClassicTransmogFrame.SettingsButton, "RIGHT", 10, 2);
+ClassicTransmogFrame.Title:SetPoint("RIGHT", ClassicTransmogFrame.CloseButton, "LEFT", -10, 0);
 ClassicTransmogFrame.Title:SetText("AllTheMogs");
 
 -- divider line under title bar
@@ -86,7 +87,7 @@ ClassicTransmogFrame:Hide();
 
 -- content
 local ContentFrame = CreateFrame("Frame", nil, ClassicTransmogFrame);
-ContentFrame:SetSize(560, 480);
+ContentFrame:SetSize(640, 480);
 ContentFrame:SetPoint("LEFT");
 ContentFrame:HookScript("OnMouseWheel", function(self, delta)
 	if (delta == -1 and currentPage < maxPage) then
@@ -186,43 +187,43 @@ function CreateFilter(texture, parent, leftFrame, tooltip, func, label)
 end
 
 -- rwp
-local rwpFrame = CreateFilter("XMarksTheSpot", ContentFrame, nil, "Items removed in Cataclysm (RWP)", function(self)
-	app.filterRWP = not self:GetChecked();
+local rwpFrame = CreateFilter("XMarksTheSpot", ContentFrame, nil, "Exclude items removed in Cataclysm (RWP)", function(self)
+	app.filterRWP = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "RWP");
 rwpFrame:SetPoint("BOTTOMLEFT", ContentFrame, "BOTTOMLEFT", 15, 10);
 -- boe
-local boeFrame = CreateFilter("Auctioneer", ContentFrame, rwpFrame, "Bind on Equip Items (B)", function(self)
-	app.filterBOE = not self:GetChecked();
+local boeFrame = CreateFilter("Auctioneer", ContentFrame, rwpFrame, "Exclude Bind on Equip Items (B)", function(self)
+	app.filterBOE = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "BoE");
 boeFrame:SetPoint("LEFT", rwpFrame, "RIGHT", 8, 0);
 -- pvp
-local pvpFrame = CreateFilter("CrossedFlags", ContentFrame, boeFrame, "PvP Items (PvP)", function(self)
-	app.filterPVP = not self:GetChecked();
+local pvpFrame = CreateFilter("CrossedFlags", ContentFrame, boeFrame, "Exclude PvP Items (PvP)", function(self)
+	app.filterPVP = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "PvP");
 pvpFrame:SetPoint("LEFT", boeFrame, "RIGHT", 8, 0);
 -- quest
-local questFrame = CreateFilter("QuestNormal", ContentFrame, pvpFrame, "Quest rewards Items (Q)", function(self)
-	app.filterQuest = not self:GetChecked();
+local questFrame = CreateFilter("QuestNormal", ContentFrame, pvpFrame, "Exclude Quest rewards Items (Q)", function(self)
+	app.filterQuest = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "Quest");
 questFrame:SetPoint("LEFT", pvpFrame, "RIGHT", 8, 0);
 -- craft
-local craftFrame = CreateFilter("Profession", ContentFrame, questFrame, "Crafted Items (C)", function(self)
-	app.filterCraft = not self:GetChecked();
+local craftFrame = CreateFilter("Profession", ContentFrame, questFrame, "Exclude Crafted Items (C)", function(self)
+	app.filterCraft = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "Craft");
 craftFrame:SetPoint("LEFT", questFrame, "RIGHT", 8, 0);
 -- drop
-local dropFrame = CreateFilter("DungeonSkull", ContentFrame, craftFrame, "Dropped Items (D)", function(self)
-	app.filterDrop = not self:GetChecked();
+local dropFrame = CreateFilter("DungeonSkull", ContentFrame, craftFrame, "Exclude Dropped Items (D)", function(self)
+	app.filterDrop = self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
 end, "Drop");
@@ -231,24 +232,82 @@ dropFrame:SetPoint("LEFT", craftFrame, "RIGHT", 8, 0);
 -- vertical divider between content and detail panel
 local DividerLine = ClassicTransmogFrame:CreateTexture(nil, "OVERLAY");
 DividerLine:SetSize(2, 480);
-DividerLine:SetPoint("LEFT", ContentFrame, "RIGHT", 0, 0);
-DividerLine:SetPoint("TOP", ContentFrame, "TOP", 0, 0);
+DividerLine:SetPoint("TOPLEFT", ContentFrame, "TOPRIGHT", 0, 0);
 DividerLine:SetColorTexture(0.25, 0.25, 0.35, 0.6);
 
--- scroll
+-- scroll region — uses ScrollFrameTemplate for native scrollbar UI
 local ScrollFrame = CreateFrame("ScrollFrame", nil, ClassicTransmogFrame, "ScrollFrameTemplate")
-ScrollFrame:SetSize(350, 430)
-ScrollFrame:SetPoint("LEFT", ContentFrame, "RIGHT", 0, 0)
--- details
+ScrollFrame:SetSize(350, 480)
+ScrollFrame:SetPoint("LEFT", ContentFrame, "RIGHT", 10, 0)
+app.ScrollFrame = ScrollFrame; -- expose for AppearanceDetailFrame.lua
+
+-- detail panel — sibling of ScrollFrame, anchored within its coordinate space
 AppearanceDetailFrame = CreateFrame("Frame", "AppearanceDetailsFrame", ClassicTransmogFrame)
-AppearanceDetailFrame:SetSize(350, 2000)
-AppearanceDetailFrame:SetPoint("LEFT", ContentFrame, "RIGHT", 50, 0)
-ScrollFrame:SetScrollChild(AppearanceDetailFrame)
+AppearanceDetailFrame:SetSize(320, 2000)
+AppearanceDetailFrame:SetPoint("TOPLEFT", ScrollFrame, "TOPLEFT", 5, -5)
+
+-- scroll region background (so detail panel has a visible container)
+ScrollFrame.bg = ScrollFrame:CreateTexture(nil, "BACKGROUND");
+ScrollFrame.bg:SetAllPoints();
+ScrollFrame.bg:SetColorTexture(ATM_BG_DARK[1], ATM_BG_DARK[2], ATM_BG_DARK[3], 0.5);
+
+-- manual scroll state
+local scrollOffset = 0;
+local scrollStep = 40; -- pixels per step (matches item height + gap)
+local scrollMax = 0;   -- computed when items are loaded
+
+ScrollFrame:SetScript("OnMouseWheel", function(self, delta)
+	if delta == -1 and scrollOffset < scrollMax then
+		scrollOffset = math.min(scrollOffset + scrollStep * 3, scrollMax);
+		AppearanceDetailFrame:SetPoint("TOPLEFT", ScrollFrame, "TOPLEFT", 5, -5 - scrollOffset);
+	elseif delta == 1 and scrollOffset > 0 then
+		scrollOffset = math.max(scrollOffset - scrollStep * 3, 0);
+		AppearanceDetailFrame:SetPoint("TOPLEFT", ScrollFrame, "TOPLEFT", 5, -5 - scrollOffset);
+	end
+end);
+
+-- sync native scrollbar dragging with manual scroll offset
+local function OnScrollBarValueChanged(value)
+	scrollOffset = math.floor(value);
+	AppearanceDetailFrame:SetPoint("TOPLEFT", ScrollFrame, "TOPLEFT", 5, -5 - scrollOffset);
+end
+app.ScrollBar_OnValueChanged = OnScrollBarValueChanged; -- called from SetScrollVisible when scrollbar exists
+
+-- show/hide scrollbar based on whether there's content to scroll
+local function SetScrollVisible()
+	if ScrollFrame and ScrollFrame.ScrollBar then
+		-- count visible items
+		local totalItems = 0;
+		for i = 1, #AppearanceDetailFrame.items do
+			if AppearanceDetailFrame.items[i]:IsVisible() then
+				totalItems = i;
+			end
+		end
+		local visibleItems = math.floor(480 / 40);
+		if totalItems > visibleItems then
+			scrollMax = math.ceil((totalItems - visibleItems) * 40);
+			ScrollFrame.ScrollBar:SetMinMaxValues(0, scrollMax);
+			ScrollFrame.ScrollBar:SetValue(scrollOffset);
+			ScrollFrame.ScrollBar:Show();
+			-- hook the scrollbar value changed script (only available when scrolling is needed)
+			if not ScrollFrame.ScrollBar.__atm_scrolled_hooked then
+				ScrollFrame.ScrollBar:HookScript("OnValueChanged", OnScrollBarValueChanged);
+				ScrollFrame.ScrollBar.__atm_scrolled_hooked = true;
+			end
+		else
+			ScrollFrame.ScrollBar:Hide();
+			scrollMax = 0;
+			scrollOffset = 0;
+			AppearanceDetailFrame:SetPoint("TOPLEFT", ScrollFrame, "TOPLEFT", 5, -5);
+		end
+	end
+end
+app.SetScrollVisible = SetScrollVisible;
 AppearanceDetailFrame_Init(AppearanceDetailFrame);
 
 -- menu
 local MenuFrame = CreateFrame("Frame", nil, ClassicTransmogFrame)
-MenuFrame:SetSize(900, 50)
+MenuFrame:SetSize(1000, 50)
 MenuFrame:SetPoint("TOPLEFT", ClassicTransmogFrame, "TOPLEFT", 5, -5)
 
 -- items number
@@ -278,5 +337,3 @@ frame:SetScript("OnEvent", function()
 
 	InitializeMiniMapButton();
 end);
-
-print("AllTheMogs loaded !");
