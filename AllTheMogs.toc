@@ -1,7 +1,8 @@
-## Interface: 110107
+## Interface: 120100
 ## Title: AllTheMogs
-## Name: AllTheMogs
 ## Notes: Addon to check all the Transmogrifications available in game
+## Category: Appearance
+## IconTexture: Textures\minimap_icon
 ## Version: @project-version@
 ## Author: Chrales
 ## X-Curse-Project-ID: 978634
@@ -9,20 +10,14 @@
 ## SavedVariables: ATM_InterfaceOptions, ATM_ItemCache, ATM_CharacterInventory, ATM_GuildBankInventory
 
 embeds.xml
-
 InterfaceOptions.lua
-
 AppearancesData\RetailAppearances.lua
 Database.lua
 Inventory.lua
-
 Localization.lua
-
 Tooltip.lua
-
 MinimapButton.lua
 Menu.lua
 AppearanceModelFrame.lua
 AppearanceDetailFrame.lua
-
 AllTheMogs.lua

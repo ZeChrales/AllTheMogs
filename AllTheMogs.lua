@@ -1,5 +1,13 @@
 local appName, app = ...;
 
+-- Color palette for consistent dark theme
+local ATM_BG_DARK = {0.05, 0.05, 0.08};
+local ATM_BG_MID = {0.1, 0.1, 0.15};
+local ATM_BG_HOVER = {0.18, 0.18, 0.25};
+local ATM_BG_ACTIVE = {0.22, 0.22, 0.3};
+local ATM_BORDER = {0.3, 0.3, 0.4};
+local ATM_ACCENT = {0.2, 0.35, 0.55};
+
 --------------------------------------------------------------------
 -- globals
 
@@ -17,6 +25,11 @@ currentPage = 1;
 -- max page
 maxPage = 1;
 
+-- helper to update page text display
+function UpdatePageText()
+	pageText:SetText(currentPage .. " / " .. maxPage);
+end
+
 --------------------------------------------------------------------
 
 local ClassicTransmogFrame = CreateFrame("Frame", "ClassicTransmogFrame", UIParent,
@@ -26,7 +39,7 @@ _G["MyFrame"] = ClassicTransmogFrame;
 tinsert(UISpecialFrames, ClassicTransmogFrame:GetName());
 
 ClassicTransmogFrame:SetPoint("CENTER")
-ClassicTransmogFrame:SetSize(900, 500)
+ClassicTransmogFrame:SetSize(950, 520)
 ClassicTransmogFrame:EnableMouse(true)
 ClassicTransmogFrame:SetMovable(true)
 --ClassicTransmogFrame:SetClampedToScreen(true);
@@ -36,13 +49,13 @@ ClassicTransmogFrame:SetScript("OnDragStart", function(self) self:StartMoving() 
 ClassicTransmogFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 ClassicTransmogFrame:SetFrameStrata("FULLSCREEN_DIALOG")
 ClassicTransmogFrame:SetBackdrop({
-	bgFile = "Interface\\Collections\\CollectionsBackgroundTile",
-	edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-	edgeSize = 16,
-	insets = { left = 4, right = 4, top = 4, bottom = 4 }
+	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+	edgeSize = 12,
+	insets = { left = 6, right = 6, top = 6, bottom = 6 }
 });
---ClassicTransmogFrame:SetBackdropBorderColor(1, 1, 1, 1);
---ClassicTransmogFrame:SetBackdropColor(0, 0, 0, 1);
+ClassicTransmogFrame:SetBackdropBorderColor(0.3, 0.3, 0.4, 0.8);
+ClassicTransmogFrame:SetBackdropColor(0.05, 0.05, 0.08, 0.95);
 
 -- close
 ClassicTransmogFrame.CloseButton = CreateFrame("Button", nil, ClassicTransmogFrame, "UIPanelCloseButton");
@@ -57,11 +70,23 @@ ClassicTransmogFrame.SettingsButton:HookScript("OnClick", function()
 	InterfaceOptionsFrame_OpenToCategory(appName);
 end)
 
+-- title text
+ClassicTransmogFrame.Title = ClassicTransmogFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+ClassicTransmogFrame.Title:SetPoint("LEFT", ClassicTransmogFrame.SettingsButton, "RIGHT", 10, 2);
+ClassicTransmogFrame.Title:SetText("AllTheMogs");
+
+-- divider line under title bar
+ClassicTransmogFrame.Divider = ClassicTransmogFrame:CreateTexture(nil, "OVERLAY");
+ClassicTransmogFrame.Divider:SetHeight(2);
+ClassicTransmogFrame.Divider:SetPoint("TOPLEFT", ClassicTransmogFrame, "TOPLEFT", 12, -40);
+ClassicTransmogFrame.Divider:SetPoint("RIGHT", ClassicTransmogFrame.CloseButton, "LEFT", -12, 0);
+ClassicTransmogFrame.Divider:SetColorTexture(ATM_BORDER[1], ATM_BORDER[2], ATM_BORDER[3], 0.6);
+
 ClassicTransmogFrame:Hide();
 
 -- content
 local ContentFrame = CreateFrame("Frame", nil, ClassicTransmogFrame);
-ContentFrame:SetSize(500, 470);
+ContentFrame:SetSize(560, 480);
 ContentFrame:SetPoint("LEFT");
 ContentFrame:HookScript("OnMouseWheel", function(self, delta)
 	if (delta == -1 and currentPage < maxPage) then
@@ -75,15 +100,17 @@ end);
 
 -- bottom
 
--- next page
-pageNext = CreateFrame("Button", nil, ContentFrame);
+-- bottom pagination - anchored to ClassicTransmogFrame so they render above ScrollFrame
+pageNext = CreateFrame("Button", nil, ClassicTransmogFrame);
 pageNext:SetSize(32, 32);
-pageNext:SetPoint("BOTTOMRIGHT", ContentFrame, "BOTTOMRIGHT", 5, 0);
+pageNext:SetPoint("BOTTOMRIGHT", ClassicTransmogFrame, "BOTTOMRIGHT", -15, 10);
+pageNext.bg = pageNext:CreateTexture(nil, "BACKGROUND");
+pageNext.bg:SetAllPoints();
+pageNext.bg:SetColorTexture(ATM_BG_MID[1], ATM_BG_MID[2], ATM_BG_MID[3], 0.8);
 pageNext:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up");
 pageNext:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down");
 pageNext:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled");
 pageNext:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight");
-pageNext:SetHighlightAtlas("ADD");
 pageNext:HookScript("OnClick", function()
 	if (currentPage < maxPage) then
 		currentPage = currentPage + 1;
@@ -92,14 +119,16 @@ pageNext:HookScript("OnClick", function()
 end);
 
 -- previous page
-pagePrevious = CreateFrame("Button", nil, ContentFrame);
+pagePrevious = CreateFrame("Button", nil, ClassicTransmogFrame);
 pagePrevious:SetSize(32, 32);
-pagePrevious:SetPoint("RIGHT", pageNext, "LEFT", 5, 0);
+pagePrevious:SetPoint("RIGHT", pageNext, "LEFT", -5, 0);
+pagePrevious.bg = pagePrevious:CreateTexture(nil, "BACKGROUND");
+pagePrevious.bg:SetAllPoints();
+pagePrevious.bg:SetColorTexture(ATM_BG_MID[1], ATM_BG_MID[2], ATM_BG_MID[3], 0.8);
 pagePrevious:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up");
 pagePrevious:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down");
 pagePrevious:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled");
 pagePrevious:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight");
-pagePrevious:SetHighlightAtlas("ADD");
 pagePrevious:HookScript("OnClick", function()
 	if (currentPage > 1) then
 		currentPage = currentPage - 1;
@@ -107,25 +136,26 @@ pagePrevious:HookScript("OnClick", function()
 	end
 end);
 
--- current page
-pageText = ContentFrame:CreateFontString(nil, "OVERLAY", "GameTooltipText");
-pageText:SetPoint("RIGHT", pagePrevious, "LEFT", -5, 0);
-pageText:SetText(currentPage .. "/x");
+-- current page text - positioned BETWEEN prev and next buttons
+pageText = ClassicTransmogFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
+pageText:SetPoint("CENTER", pagePrevious, "RIGHT", 8, 0);
+pageText:SetPoint("CENTER", pageNext, "LEFT", -8, 0);
 
 -- source filters
-function CreateFilter(texture, parent, leftFrame, tooltip, func)
+function CreateFilter(texture, parent, leftFrame, tooltip, func, label)
 	local filterFrame = CreateFrame("Button", nil, parent);
-	if leftFrame then
-		filterFrame:SetPoint("LEFT", leftFrame, "RIGHT", 5, 0);
-	else
-		filterFrame:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 5, -5);
-	end
-	filterFrame:SetSize(28, 28);
+	filterFrame:SetSize(32, 32);
+
+	-- dark background
+	filterFrame.bg = filterFrame:CreateTexture(nil, "BACKGROUND");
+	filterFrame.bg:SetAllPoints();
+	filterFrame.bg:SetColorTexture(0.12, 0.12, 0.18, 0.8);
+
 	filterFrame:SetNormalTexture("Interface\\Minimap\\objecticonsatlas");
 	filterFrame:SetNormalAtlas(texture);
 	filterFrame.checkButton = CreateFrame("CheckButton", nil, filterFrame);
-	filterFrame.checkButton:SetPoint("BOTTOMRIGHT", filterFrame, "BOTTOMRIGHT");
-	filterFrame.checkButton:SetSize(15, 14);
+	filterFrame.checkButton:SetPoint("BOTTOMRIGHT", filterFrame, "BOTTOMRIGHT", -2, 2);
+	filterFrame.checkButton:SetSize(14, 14);
 	filterFrame.checkButton:SetNormalAtlas("checkbox-minimal");
 	filterFrame.checkButton:SetCheckedTexture("checkmark-minimal");
 	filterFrame.checkButton:SetChecked(true);
@@ -133,14 +163,24 @@ function CreateFilter(texture, parent, leftFrame, tooltip, func)
 	filterFrame:HookScript("OnClick", function()
 		filterFrame.checkButton:Click();
 	end);
-	filterFrame:HookScript("OnEnter", function()
+	filterFrame:HookScript("OnEnter", function(self)
+		self.bg:SetColorTexture(0.2, 0.2, 0.3, 0.9);
 		GameTooltip:SetOwner(filterFrame, "ANCHOR_RIGHT");
 		GameTooltip:SetText(tooltip);
 		GameTooltip:Show();
 	end);
-	filterFrame:HookScript("OnLeave", function()
+	filterFrame:HookScript("OnLeave", function(self)
+		self.bg:SetColorTexture(0.12, 0.12, 0.18, 0.8);
 		GameTooltip:Hide();
 	end);
+
+	-- label below icon
+	if label then
+		filterFrame.label = filterFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall");
+		filterFrame.label:SetPoint("BOTTOM", filterFrame, "TOP", 0, -2);
+		filterFrame.label:SetText(label);
+		filterFrame.label:SetScale(0.8);
+	end
 
 	return filterFrame;
 end
@@ -150,39 +190,50 @@ local rwpFrame = CreateFilter("XMarksTheSpot", ContentFrame, nil, "Items removed
 	app.filterRWP = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
+end, "RWP");
+rwpFrame:SetPoint("BOTTOMLEFT", ContentFrame, "BOTTOMLEFT", 15, 10);
 -- boe
 local boeFrame = CreateFilter("Auctioneer", ContentFrame, rwpFrame, "Bind on Equip Items (B)", function(self)
 	app.filterBOE = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
+end, "BoE");
+boeFrame:SetPoint("LEFT", rwpFrame, "RIGHT", 8, 0);
 -- pvp
 local pvpFrame = CreateFilter("CrossedFlags", ContentFrame, boeFrame, "PvP Items (PvP)", function(self)
 	app.filterPVP = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
+end, "PvP");
+pvpFrame:SetPoint("LEFT", boeFrame, "RIGHT", 8, 0);
 -- quest
 local questFrame = CreateFilter("QuestNormal", ContentFrame, pvpFrame, "Quest rewards Items (Q)", function(self)
 	app.filterQuest = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
--- quest
+end, "Quest");
+questFrame:SetPoint("LEFT", pvpFrame, "RIGHT", 8, 0);
+-- craft
 local craftFrame = CreateFilter("Profession", ContentFrame, questFrame, "Crafted Items (C)", function(self)
 	app.filterCraft = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
--- quest
+end, "Craft");
+craftFrame:SetPoint("LEFT", questFrame, "RIGHT", 8, 0);
+-- drop
 local dropFrame = CreateFilter("DungeonSkull", ContentFrame, craftFrame, "Dropped Items (D)", function(self)
 	app.filterDrop = not self:GetChecked();
 	currentPage = 1;
 	AppearanceModelFrame_LoadWithFilter();
-end);
+end, "Drop");
+dropFrame:SetPoint("LEFT", craftFrame, "RIGHT", 8, 0);
 
--- details
+-- vertical divider between content and detail panel
+local DividerLine = ClassicTransmogFrame:CreateTexture(nil, "OVERLAY");
+DividerLine:SetSize(2, 480);
+DividerLine:SetPoint("LEFT", ContentFrame, "RIGHT", 0, 0);
+DividerLine:SetPoint("TOP", ContentFrame, "TOP", 0, 0);
+DividerLine:SetColorTexture(0.25, 0.25, 0.35, 0.6);
 
 -- scroll
 local ScrollFrame = CreateFrame("ScrollFrame", nil, ClassicTransmogFrame, "ScrollFrameTemplate")
@@ -197,7 +248,7 @@ AppearanceDetailFrame_Init(AppearanceDetailFrame);
 
 -- menu
 local MenuFrame = CreateFrame("Frame", nil, ClassicTransmogFrame)
-MenuFrame:SetSize(850, 50)
+MenuFrame:SetSize(900, 50)
 MenuFrame:SetPoint("TOPLEFT", ClassicTransmogFrame, "TOPLEFT", 5, -5)
 
 -- items number

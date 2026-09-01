@@ -9,12 +9,12 @@
             "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_classic_era_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
         {
-            "label": "build wotlk",
+            "label": "build classic",
             "type": "shell",
             "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_classic_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
         {
-            "label": "build cata",
+            "label": "build beta",
             "type": "shell",
             "command": "$excludes = '.git', '.vscode', '.github'; Get-ChildItem . | Where-Object{$_.Name -notin $excludes} | Copy-Item -Destination 'C:\\World of Warcraft\\_classic_beta_\\Interface\\AddOns\\AllTheMogs' -Recurse -Force"
         },
@@ -27,8 +27,8 @@
             "label": "build",
             "dependsOn": [
                 "build era",
-                "build wotlk",
-                "build cata",
+                "build classic",
+                "build beta",
                 "build retail"
             ],
             "problemMatcher": [],

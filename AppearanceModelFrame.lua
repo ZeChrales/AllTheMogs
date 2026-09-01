@@ -19,14 +19,14 @@ function AppearanceModelFrame_Init(parentFrame)
 			"ModelTemplate");
 		--local ModelFrame = CreateFrame("Frame", "AppearanceModelFrameL" .. line .. "C" .. column, parentFrame);
 		if lastFrame == nil then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -20);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 14, -25);
 		elseif column == 1 then
-			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 10, -((line - 1) * 105) - 20);
+			ModelFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 14, -((line - 1) * 125) - 25);
 		else
-			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 10, 0);
+			ModelFrame:SetPoint("LEFT", lastFrame, "RIGHT", 12, 0);
 		end
 		lastFrame = ModelFrame;
-		ModelFrame:SetSize(78, 104);
+		ModelFrame:SetSize(90, 120);
 		local lightValues = {
 			omnidirectional = false,
 			point = CreateVector3D(-1, 1, -1),
@@ -41,12 +41,13 @@ function AppearanceModelFrame_Init(parentFrame)
 
 		-- background
 		ModelFrame.background = ModelFrame:CreateTexture(nil, "BACKGROUND");
-		ModelFrame.background:SetColorTexture(0, 0, 0);
+		ModelFrame.background:SetColorTexture(0.08, 0.08, 0.12, 0.85);
 		ModelFrame.background:SetAllPoints();
 
 		-- border
 		ModelFrame.border = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.border:SetPoint("CENTER", 0, -3);
+		ModelFrame.border:SetSize(90, 120);
 		ModelFrame.border:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.border:SetAtlas("transmog-wardrobe-border-uncollected", true);
 		ModelFrame.border:SetDrawLayer("OVERLAY", -1);
@@ -54,37 +55,44 @@ function AppearanceModelFrame_Init(parentFrame)
 		-- highlight
 		ModelFrame.highlight = ModelFrame:CreateTexture(nil, "HIGHLIGHT");
 		ModelFrame.highlight:SetPoint("CENTER");
+		ModelFrame.highlight:SetSize(90, 120);
 		ModelFrame.highlight:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.highlight:SetAtlas("transmog-wardrobe-border-highlighted", true);
 		ModelFrame.highlight:SetBlendMode("ADD");
+		ModelFrame.highlight:SetColorTexture(0.2, 0.3, 0.5, 0.15);
 
 		-- selected
 		ModelFrame.selected = ModelFrame:CreateTexture(nil, "OVERLAY");
 		ModelFrame.selected:SetPoint("CENTER");
+		ModelFrame.selected:SetSize(90, 120);
 		ModelFrame.selected:SetTexture("Interface\\Transmogrify\\Transmogrify");
 		ModelFrame.selected:SetAtlas("transmog-wardrobe-border-current", true);
 		ModelFrame.selected:SetBlendMode("ADD");
+		ModelFrame.selected:SetAlpha(0.9);
 
 		-- rwp
 		ModelFrame.rwp = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.rwp:SetPoint("TOPLEFT", ModelFrame, "TOPLEFT", 0, 0);
-		ModelFrame.rwp:SetSize(28, 28);
+		ModelFrame.rwp:SetPoint("TOPLEFT", ModelFrame, "TOPLEFT", 4, -4);
+		ModelFrame.rwp:SetSize(24, 24);
 		ModelFrame.rwp:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.rwp:SetAtlas("XMarksTheSpot");
+		ModelFrame.rwp:SetBlendMode("ADD");
 
 		-- boe
 		ModelFrame.boe = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.boe:SetPoint("TOP", ModelFrame, "TOP", 0, 0);
-		ModelFrame.boe:SetSize(24, 24);
+		ModelFrame.boe:SetPoint("TOP", ModelFrame, "TOP", 0, -4);
+		ModelFrame.boe:SetSize(22, 22);
 		ModelFrame.boe:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.boe:SetAtlas("Auctioneer");
+		ModelFrame.boe:SetBlendMode("ADD");
 
 		-- pvp
 		ModelFrame.pvp = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.pvp:SetPoint("TOPRIGHT", ModelFrame, "TOPRIGHT", 0, 0);
-		ModelFrame.pvp:SetSize(28, 28);
+		ModelFrame.pvp:SetPoint("TOPRIGHT", ModelFrame, "TOPRIGHT", -4, -4);
+		ModelFrame.pvp:SetSize(24, 24);
 		ModelFrame.pvp:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.pvp:SetAtlas("CrossedFlags");
+		ModelFrame.pvp:SetBlendMode("ADD");
 		-- if UnitFactionGroup("player") == "Horde" then
 		-- 	ModelFrame.pvp:SetAtlas("poi-horde");
 		-- else
@@ -93,24 +101,27 @@ function AppearanceModelFrame_Init(parentFrame)
 
 		-- quest
 		ModelFrame.quest = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.quest:SetPoint("BOTTOMLEFT", ModelFrame, "BOTTOMLEFT", -5, 0);
-		ModelFrame.quest:SetSize(32, 32);
+		ModelFrame.quest:SetPoint("BOTTOMLEFT", ModelFrame, "BOTTOMLEFT", 4, 4);
+		ModelFrame.quest:SetSize(24, 24);
 		ModelFrame.quest:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.quest:SetAtlas("QuestNormal");
+		ModelFrame.quest:SetBlendMode("ADD");
 
 		-- craft
 		ModelFrame.craft = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.craft:SetPoint("BOTTOM", ModelFrame, "BOTTOM", 0, 0);
-		ModelFrame.craft:SetSize(32, 32);
+		ModelFrame.craft:SetPoint("BOTTOM", ModelFrame, "BOTTOM", 0, 4);
+		ModelFrame.craft:SetSize(22, 22);
 		ModelFrame.craft:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.craft:SetAtlas("Profession");
+		ModelFrame.craft:SetBlendMode("ADD");
 
 		-- drop
 		ModelFrame.drop = ModelFrame:CreateTexture(nil, "OVERLAY");
-		ModelFrame.drop:SetPoint("BOTTOMRIGHT", ModelFrame, "BOTTOMRIGHT", 0, 0);
-		ModelFrame.drop:SetSize(32, 32);
+		ModelFrame.drop:SetPoint("BOTTOMRIGHT", ModelFrame, "BOTTOMRIGHT", -4, 4);
+		ModelFrame.drop:SetSize(24, 24);
 		ModelFrame.drop:SetTexture("Interface\\Minimap\\objecticonsatlas");
 		ModelFrame.drop:SetAtlas("DungeonSkull");
+		ModelFrame.drop:SetBlendMode("ADD");
 
 		ModelFrame:SetScript("OnMouseDown", function()
 			if selected ~= i then
@@ -267,7 +278,7 @@ function AppearanceModelFrame_LoadWithFilter()
 		bonusPage = 1;
 	end
 	maxPage = math.floor(#listAppearances / 20) + bonusPage;
-	pageText:SetText(currentPage .. " / " .. maxPage);
+	UpdatePageText();
 
 	local count = 0;
 	-- 1 : 1...20 / 2 : 21...40

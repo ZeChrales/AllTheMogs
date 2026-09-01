@@ -1,7 +1,7 @@
 local appName, app = ...;
 -- adapted from WardrobeItemsCollectionMixin:CreateSlotButtons in Blizzard_Wardrobe.lua
 local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0");
-local spacingNoSmallButton = 2;
+local spacingNoSmallButton = 4;
 local defaultSectionSpacing = 24;
 local xOffset = spacingNoSmallButton;
 local slots = { "head", "shoulder", "back", "chest", "shirt", "tabard", "wrist", defaultSectionSpacing, "hands", "waist",
@@ -136,15 +136,22 @@ function CreateMenu(parentFrame)
 			lastButton = menuButton;
 			xOffset = spacingNoSmallButton;
 
-			menuButton:SetSize(31, 31)
+			menuButton:SetSize(36, 36)
+			-- dark background
+			menuButton.bg = menuButton:CreateTexture(nil, "BACKGROUND");
+			menuButton.bg:SetAllPoints();
+			menuButton.bg:SetColorTexture(0.1, 0.1, 0.15, 0.7);
 			menuButton:SetNormalTexture("Interface\\Transmogrify\\Transmogrify");
 			menuButton:SetNormalAtlas("transmog-nav-slot-" .. slots[i]);
 			menuButton:SetHighlightTexture("Interface\\Transmogrify\\Transmogrify");
 			menuButton:SetHighlightAtlas("bags-roundhighlight");
 			menuButton.selected = menuButton:CreateTexture(nil, "OVERLAY");
 			menuButton.selected:SetPoint("CENTER");
+			menuButton.selected:SetSize(36, 36);
 			menuButton.selected:SetTexture("Interface\\Transmogrify\\Transmogrify");
 			menuButton.selected:SetAtlas("transmog-nav-slot-selected", true);
+			menuButton.selected:SetBlendMode("ADD");
+			menuButton.selected:SetAlpha(0.9);
 			menuButton.selected:Hide();
 
 			menuButton:HookScript("OnClick", function()

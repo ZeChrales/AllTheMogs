@@ -6,9 +6,10 @@ local AppearanceDetailFrame;
 function AppearanceDetailFrame_Init(parentFrame)
 	AppearanceDetailFrame = parentFrame;
 
-	AppearanceDetailFrame.text = AppearanceDetailFrame:CreateFontString(nil, "OVERLAY", "GameTooltipText");
+	AppearanceDetailFrame.text = AppearanceDetailFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
 	AppearanceDetailFrame.text:SetPoint("TOP", AppearanceDetailFrame, "TOP", 0, -10);
-	AppearanceDetailFrame.text:SetText("AppearanceDetailFrame_appearanceId");
+	AppearanceDetailFrame.text:SetSize(320, 20);
+	AppearanceDetailFrame.text:SetText("AppearanceID");
 
 	AppearanceDetailFrame.items = {};
 	for i = 1, 10 do
@@ -17,6 +18,8 @@ function AppearanceDetailFrame_Init(parentFrame)
 end
 
 function AppearanceDetailFrame_Load(appearanceId)
+	if not AppearanceDetailFrame then return; end;
+
 	AppearanceDetailFrame.text:SetText(appearanceId);
 	AppearanceDetailItem_Reset();
 
@@ -66,20 +69,42 @@ function AppearanceDetailItem_Get(num)
 	if item == nil then
 		AppearanceDetailFrame.items[num] = CreateFrame("Frame", "ItemDetail" .. num, AppearanceDetailFrame);
 		item = AppearanceDetailFrame.items[num];
-		item:SetPoint("TOP", AppearanceDetailFrame, "TOP", 0, -20 * (num + 1));
-		item:SetSize(300, 20);
+		item:SetPoint("TOP", AppearanceDetailFrame, "TOP", 0, -20 - (num * 36));
+		item:SetPoint("LEFT", AppearanceDetailFrame, "LEFT", 15, 0);
+		item:SetPoint("RIGHT", AppearanceDetailFrame, "RIGHT", -15, 0);
+		item:SetSize(320, 32);
 
-		--item:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD");
+		-- card background
+		item.bg = item:CreateTexture(nil, "BACKGROUND");
+		item.bg:SetAllPoints();
+		item.bg:SetColorTexture(0.1, 0.1, 0.15, 0.6);
 
-		item.text = item:CreateFontString(nil, "OVERLAY", "GameTooltipText");
+		item:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD");
+		item:SetHighlightColorTexture(0.2, 0.2, 0.3, 0.4);
+
+		-- hover effects
+		item:SetScript("OnEnter", function(self)
+			self.bg:SetColorTexture(0.15, 0.15, 0.22, 0.8);
+		end);
+		item:SetScript("OnLeave", function(self)
+			self.bg:SetColorTexture(0.1, 0.1, 0.15, 0.6);
+		end);
+
+		item.text = item:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 		item.text:SetPoint("CENTER");
 		item.text:SetText("AppearanceDetailFrame_itemId" .. num);
 
 		item.collected = item:CreateFontString(nil, "OVERLAY", "GameTooltipText");
 		item.collected:SetPoint("RIGHT");
+		item.collected:SetSize(16, 16);
 
-		item:SetHyperlinksEnabled(true)
-		item:SetScript("OnHyperlinkClick", ChatFrame_OnHyperlinkShow)
+		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+			item:SetScript("OnHyperlinkClick", ChatFrame_OnHyperlinkShow)
+		else
+			item:SetScript("OnHyperlinkClick", function(self, link, text)
+				ChatFrame_OnHyperlinkClick(self, link, text)
+			end)
+		end
 
 		item:HookScript("OnHyperlinkEnter", function()
 			GameTooltip:SetOwner(item, "ANCHOR_RIGHT");
